@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<style>
+
+body{
+margin:0;
+background:transparent;
+font-family:Segoe UI,Arial;
+}
+
+.board{
+width:360px;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 14px;
+border-radius:14px;
+margin-bottom:6px;
+transition:all .4s ease;
+position:relative;
+}
+
+.gold{
+background:linear-gradient(90deg,#f6d776,#e6b73f);
+box-shadow:0 0 15px rgba(255,215,0,0.5);
+}
+
+.silver{
+background:rgba(180,180,180,0.25);
+backdrop-filter:blur(8px);
+}
+
+.flag{
+width:28px;
+margin-right:10px;
+border-radius:4px;
+}
+
+.country{
+display:flex;
+align-items:center;
+font-weight:600;
+font-size:15px;
+color:white;
+}
+
+.score{
+background:rgba(255,255,255,0.8);
+padding:4px 12px;
+border-radius:10px;
+font-weight:bold;
+font-size:14px;
+color:black;
+}
+
+.crown{
+font-size:16px;
+margin-right:6px;
+}
+
+.points{
+position:absolute;
+right:60px;
+font-weight:bold;
+color:#00ff6a;
+font-size:18px;
+animation:pop 1s forwards;
+}
+
+@keyframes pop{
+
+0%{
+opacity:0;
+transform:translateY(10px) scale(0.8);
+}
+
+50%{
+opacity:1;
+transform:translateY(-10px) scale(1.2);
+}
+
+100%{
+opacity:0;
+transform:translateY(-25px) scale(1);
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="board" class="board"></div>
+
+<script>
+
+let countries=[
+
+{name:"Slovakia",score:0,flag:"https://flagcdn.com/w40/sk.png"},
+{name:"Czechia",score:0,flag:"https://flagcdn.com/w40/cz.png"},
+{name:"Poland",score:0,flag:"https://flagcdn.com/w40/pl.png"},
+{name:"Hungary",score:0,flag:"https://flagcdn.com/w40/hu.png"},
+{name:"Croatia",score:0,flag:"https://flagcdn.com/w40/hr.png"},
+{name:"Ukraine",score:0,flag:"https://flagcdn.com/w40/ua.png"},
+{name:"Russia",score:0,flag:"https://flagcdn.com/w40/ru.png"},
+{name:"Austria",score:0,flag:"https://flagcdn.com/w40/at.png"},
+{name:"Germany",score:0,flag:"https://flagcdn.com/w40/de.png"},
+{name:"Albania",score:0,flag:"https://flagcdn.com/w40/al.png"},
+{name:"Switzerland",score:0,flag:"https://flagcdn.com/w40/ch.png"}
+
+]
+
+function draw(){
+
+countries.sort((a,b)=>b.score-a.score)
+
+let html=""
+
+countries.forEach((c,i)=>{
+
+let style=i==0?"row gold":"row silver"
+let crown=i==0?"<span class='crown'>👑</span>":""
+
+html+=`
+<div class="${style}" id="${c.name}">
+<div class="country">
+${crown}
+<img class="flag" src="${c.flag}">
+${c.name}
+</div>
+
+<div class="score">${c.score}</div>
+
+</div>
+`
+
+})
+
+document.getElementById("board").innerHTML=html
+
+}
+
+draw()
+
+const socket=new WebSocket("ws://localhost:3000")
+
+socket.onmessage=function(event){
+
+let data=JSON.parse(event.data)
+
+let c=countries.find(x=>x.name===data.country)
+
+if(c){
+
+c.score+=data.points
+
+}
+
+draw()
+
+let el=document.getElementById(data.country)
+
+if(el){
+
+let pop=document.createElement("div")
+pop.className="points"
+pop.innerText="+"+data.points
+
+el.appendChild(pop)
+
+setTimeout(()=>{
+pop.remove()
+},1000)
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
