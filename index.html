@@ -26,13 +26,16 @@ transition:all .4s ease;
 position:relative;
 }
 
+/* 1. miesto */
 .gold{
-background:linear-gradient(90deg,#f6d776,#e6b73f);
+background:linear-gradient(90deg,rgba(246,215,118,0.7),rgba(230,183,63,0.7));
 box-shadow:0 0 15px rgba(255,215,0,0.5);
+backdrop-filter:blur(6px);
 }
 
+/* ostatné */
 .silver{
-background:rgba(180,180,180,0.25);
+background:rgba(150,150,150,0.25);
 backdrop-filter:blur(8px);
 }
 
@@ -45,13 +48,20 @@ border-radius:4px;
 .country{
 display:flex;
 align-items:center;
-font-weight:600;
-font-size:15px;
+font-weight:700;
+font-size:16px;
 color:white;
+
+/* čierny obrys textu */
+text-shadow:
+-2px -2px 0 #000,
+2px -2px 0 #000,
+-2px 2px 0 #000,
+2px 2px 0 #000;
 }
 
 .score{
-background:rgba(255,255,255,0.8);
+background:rgba(255,255,255,0.85);
 padding:4px 12px;
 border-radius:10px;
 font-weight:bold;
@@ -60,7 +70,7 @@ color:black;
 }
 
 .crown{
-font-size:16px;
+font-size:18px;
 margin-right:6px;
 }
 
@@ -69,7 +79,15 @@ position:absolute;
 right:60px;
 font-weight:bold;
 color:#00ff6a;
-font-size:18px;
+font-size:20px;
+
+/* čierny obrys aj pre +30 */
+text-shadow:
+-2px -2px 0 #000,
+2px -2px 0 #000,
+-2px 2px 0 #000,
+2px 2px 0 #000;
+
 animation:pop 1s forwards;
 }
 
@@ -159,9 +177,7 @@ let data=JSON.parse(event.data)
 let c=countries.find(x=>x.name===data.country)
 
 if(c){
-
 c.score+=data.points
-
 }
 
 draw()
