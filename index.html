@@ -13,6 +13,7 @@ font-family:Segoe UI,Arial;
 
 .board{
 width:360px;
+position:relative;
 }
 
 .row{
@@ -22,18 +23,18 @@ align-items:center;
 padding:10px 14px;
 border-radius:14px;
 margin-bottom:6px;
-transition:all .4s ease;
-position:relative;
+position:absolute;
+width:100%;
+box-sizing:border-box;
+transition:transform .5s ease;
 }
 
-/* 1. miesto */
 .gold{
 background:linear-gradient(90deg,rgba(246,215,118,0.7),rgba(230,183,63,0.7));
-box-shadow:0 0 15px rgba(255,215,0,0.5);
+box-shadow:0 0 20px rgba(255,215,0,0.7);
 backdrop-filter:blur(6px);
 }
 
-/* ostatné */
 .silver{
 background:rgba(150,150,150,0.25);
 backdrop-filter:blur(8px);
@@ -52,7 +53,6 @@ font-weight:700;
 font-size:16px;
 color:white;
 
-/* čierny obrys textu */
 text-shadow:
 -2px -2px 0 #000,
 2px -2px 0 #000,
@@ -74,6 +74,8 @@ font-size:18px;
 margin-right:6px;
 }
 
+/* +30 animácia */
+
 .points{
 position:absolute;
 right:60px;
@@ -81,7 +83,6 @@ font-weight:bold;
 color:#00ff6a;
 font-size:20px;
 
-/* čierny obrys aj pre +30 */
 text-shadow:
 -2px -2px 0 #000,
 2px -2px 0 #000,
@@ -106,6 +107,31 @@ transform:translateY(-10px) scale(1.2);
 100%{
 opacity:0;
 transform:translateY(-25px) scale(1);
+}
+
+}
+
+/* animácia keď sa zmení 1. miesto */
+
+.leaderFlash{
+
+animation:leader 1s;
+
+}
+
+@keyframes leader{
+
+0%{
+box-shadow:0 0 0px gold;
+}
+
+50%{
+box-shadow:0 0 30px gold;
+transform:scale(1.05);
+}
+
+100%{
+box-shadow:0 0 20px rgba(255,215,0,0.7);
 }
 
 }
@@ -136,33 +162,70 @@ let countries=[
 
 ]
 
-function draw(){
+let previousLeader = null
 
-countries.sort((a,b)=>b.score-a.score)
-
-let html=""
+const board=document.getElementById("board")
 
 countries.forEach((c,i)=>{
 
-let style=i==0?"row gold":"row silver"
-let crown=i==0?"<span class='crown'>👑</span>":""
+let row=document.createElement("div")
+row.className="row silver"
+row.id=c.name
 
-html+=`
-<div class="${style}" id="${c.name}">
+row.innerHTML=`
+
 <div class="country">
-${crown}
 <img class="flag" src="${c.flag}">
 ${c.name}
 </div>
 
-<div class="score">${c.score}</div>
+<div class="score">0</div>
 
-</div>
 `
+
+board.appendChild(row)
 
 })
 
-document.getElementById("board").innerHTML=html
+function draw(){
+
+countries.sort((a,b)=>b.score-a.score)
+
+countries.forEach((c,i)=>{
+
+let el=document.getElementById(c.name)
+
+let y=i*50
+
+el.style.transform=`translateY(${y}px)`
+
+el.querySelector(".score").innerText=c.score
+
+if(i==0){
+
+el.classList.add("gold")
+el.classList.remove("silver")
+
+if(previousLeader!==c.name){
+
+el.classList.add("leaderFlash")
+
+setTimeout(()=>{
+el.classList.remove("leaderFlash")
+},1000)
+
+previousLeader=c.name
+
+}
+
+}else{
+
+el.classList.add("silver")
+el.classList.remove("gold")
+
+}
+
+})
 
 }
 
@@ -177,7 +240,9 @@ let data=JSON.parse(event.data)
 let c=countries.find(x=>x.name===data.country)
 
 if(c){
+
 c.score+=data.points
+
 }
 
 draw()
