@@ -8,132 +8,74 @@
 body{
 margin:0;
 background:transparent;
-font-family:Segoe UI,Arial;
+font-family:Arial;
+color:white;
 }
 
-.board{
-width:360px;
-position:relative;
+.track{
+width:700px;
 }
 
 .row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:10px 14px;
-border-radius:14px;
-margin-bottom:6px;
-position:absolute;
-width:100%;
-box-sizing:border-box;
-transition:transform .5s ease;
+position:relative;
+height:40px;
+margin:6px 0;
+background:linear-gradient(90deg,#111,#1a1a1a);
+border-radius:8px;
+overflow:hidden;
 }
 
-.gold{
-background:linear-gradient(90deg,rgba(246,215,118,0.7),rgba(230,183,63,0.7));
-box-shadow:0 0 20px rgba(255,215,0,0.7);
-backdrop-filter:blur(6px);
-}
-
-.silver{
-background:rgba(150,150,150,0.25);
-backdrop-filter:blur(8px);
+.row:nth-child(odd){
+background:linear-gradient(90deg,#151515,#222);
 }
 
 .flag{
-width:28px;
-margin-right:10px;
-border-radius:4px;
-}
-
-.country{
-display:flex;
-align-items:center;
-font-weight:700;
-font-size:16px;
-color:white;
-
-text-shadow:
--2px -2px 0 #000,
-2px -2px 0 #000,
--2px 2px 0 #000,
-2px 2px 0 #000;
-}
-
-.score{
-background:rgba(255,255,255,0.85);
-padding:4px 12px;
-border-radius:10px;
-font-weight:bold;
-font-size:14px;
-color:black;
-}
-
-.crown{
-font-size:18px;
-margin-right:6px;
-}
-
-/* +30 animácia */
-
-.points{
 position:absolute;
-right:60px;
-font-weight:bold;
-color:#00ff6a;
-font-size:20px;
-
-text-shadow:
--2px -2px 0 #000,
-2px -2px 0 #000,
--2px 2px 0 #000,
-2px 2px 0 #000;
-
-animation:pop 1s forwards;
+left:5px;
+top:8px;
+font-size:18px;
 }
 
-@keyframes pop{
-
-0%{
-opacity:0;
-transform:translateY(10px) scale(0.8);
+.car{
+position:absolute;
+left:40px;
+top:8px;
+transition:transform 0.3s ease;
 }
 
-50%{
-opacity:1;
-transform:translateY(-10px) scale(1.2);
+.finish{
+position:absolute;
+right:0;
+top:0;
+height:100%;
+width:6px;
+background:repeating-linear-gradient(
+45deg,
+white,
+white 5px,
+black 5px,
+black 10px
+);
 }
 
-100%{
-opacity:0;
-transform:translateY(-25px) scale(1);
+.hit{
+animation:hit 0.3s;
 }
 
+@keyframes hit{
+0%{transform:scale(1)}
+50%{transform:scale(1.4)}
+100%{transform:scale(1)}
 }
 
-/* animácia keď sa zmení 1. miesto */
-
-.leaderFlash{
-
-animation:leader 1s;
-
+.win{
+animation:flash 0.5s 3;
 }
 
-@keyframes leader{
-
-0%{
-box-shadow:0 0 0px gold;
-}
-
-50%{
-box-shadow:0 0 30px gold;
-transform:scale(1.05);
-}
-
-100%{
-box-shadow:0 0 20px rgba(255,215,0,0.7);
-}
-
+@keyframes flash{
+0%{background:#0f0}
+50%{background:#fff}
+100%{background:#0f0}
 }
 
 </style>
@@ -142,126 +84,129 @@ box-shadow:0 0 20px rgba(255,215,0,0.7);
 
 <body>
 
-<div id="board" class="board"></div>
+<div id="track" class="track"></div>
 
 <script>
 
-let countries=[
+const MAX_STEPS = 250;
 
-{name:"Slovakia",score:0,flag:"https://flagcdn.com/w40/sk.png"},
-{name:"Czechia",score:0,flag:"https://flagcdn.com/w40/cz.png"},
-{name:"Poland",score:0,flag:"https://flagcdn.com/w40/pl.png"},
-{name:"Hungary",score:0,flag:"https://flagcdn.com/w40/hu.png"},
-{name:"Croatia",score:0,flag:"https://flagcdn.com/w40/hr.png"},
-{name:"Ukraine",score:0,flag:"https://flagcdn.com/w40/ua.png"},
-{name:"Russia",score:0,flag:"https://flagcdn.com/w40/ru.png"},
-{name:"Austria",score:0,flag:"https://flagcdn.com/w40/at.png"},
-{name:"Germany",score:0,flag:"https://flagcdn.com/w40/de.png"},
-{name:"Albania",score:0,flag:"https://flagcdn.com/w40/al.png"},
-{name:"Switzerland",score:0,flag:"https://flagcdn.com/w40/ch.png"}
+let countries = [
+"Slovakia","Czechia","Hungary","Poland","Germany",
+"France","Russia","Ukraine","Austria","Italy",
+"USA","China","Albania","Serbia","UK",
+"Korea","Switzerland","Indonesia","Croatia","Australia"
+];
 
-]
+let progress = {};
+let wins = {};
 
-let previousLeader = null
+countries.forEach(c=>{
+progress[c]=0;
+wins[c]=0;
+});
 
-const board=document.getElementById("board")
-
-countries.forEach((c,i)=>{
-
-let row=document.createElement("div")
-row.className="row silver"
-row.id=c.name
-
-row.innerHTML=`
-
-<div class="country">
-<img class="flag" src="${c.flag}">
-${c.name}
-</div>
-
-<div class="score">0</div>
-
-`
-
-board.appendChild(row)
-
-})
+function flagEmoji(country){
+const map={
+"Slovakia":"🇸🇰",
+"Czechia":"🇨🇿",
+"Hungary":"🇭🇺",
+"Poland":"🇵🇱",
+"Germany":"🇩🇪",
+"France":"🇫🇷",
+"Russia":"🇷🇺",
+"Ukraine":"🇺🇦",
+"Austria":"🇦🇹",
+"Italy":"🇮🇹",
+"USA":"🇺🇸",
+"China":"🇨🇳",
+"Albania":"🇦🇱",
+"Serbia":"🇷🇸",
+"UK":"🇬🇧",
+"Korea":"🇰🇷",
+"Switzerland":"🇨🇭",
+"Indonesia":"🇮🇩",
+"Croatia":"🇭🇷",
+"Australia":"🇦🇺"
+};
+return map[country] || "🏳️";
+}
 
 function draw(){
 
-countries.sort((a,b)=>b.score-a.score)
+let html="";
 
-countries.forEach((c,i)=>{
+countries.forEach(c=>{
 
-let el=document.getElementById(c.name)
+html+=`
+<div class="row" id="${c}">
+<div class="flag">${flagEmoji(c)}</div>
+<div class="car" id="car-${c}">🚗</div>
+<div class="finish"></div>
+</div>
+`;
 
-let y=i*50
+});
 
-el.style.transform=`translateY(${y}px)`
+document.getElementById("track").innerHTML=html;
 
-el.querySelector(".score").innerText=c.score
+}
 
-if(i==0){
+draw();
 
-el.classList.add("gold")
-el.classList.remove("silver")
+function moveCar(country,steps){
 
-if(previousLeader!==c.name){
+progress[country]+=steps;
 
-el.classList.add("leaderFlash")
+let percent = (progress[country]/MAX_STEPS)*100;
+
+let car = document.getElementById("car-"+country);
+
+if(car){
+
+car.style.transform = `translateX(${percent*5}px)`;
+
+car.classList.add("hit");
+setTimeout(()=>car.classList.remove("hit"),300);
+
+}
+
+if(progress[country] >= MAX_STEPS){
+
+let row = document.getElementById(country);
+
+row.classList.add("win");
 
 setTimeout(()=>{
-el.classList.remove("leaderFlash")
-},1000)
+row.classList.remove("win");
+},1000);
 
-previousLeader=c.name
+wins[country]++;
 
-}
-
-}else{
-
-el.classList.add("silver")
-el.classList.remove("gold")
+resetRace();
 
 }
 
-})
+}
+
+function resetRace(){
+
+countries.forEach(c=>{
+progress[c]=0;
+let car=document.getElementById("car-"+c);
+car.style.transform="translateX(0px)";
+});
 
 }
 
-draw()
+const socket = new WebSocket("ws://localhost:3000");
 
-const socket=new WebSocket("ws://localhost:3000")
+socket.onmessage = function(event){
 
-socket.onmessage=function(event){
+let data = JSON.parse(event.data);
 
-let data=JSON.parse(event.data)
+let steps = data.coins * 5;
 
-let c=countries.find(x=>x.name===data.country)
-
-if(c){
-
-c.score+=data.points
-
-}
-
-draw()
-
-let el=document.getElementById(data.country)
-
-if(el){
-
-let pop=document.createElement("div")
-pop.className="points"
-pop.innerText="+"+data.points
-
-el.appendChild(pop)
-
-setTimeout(()=>{
-pop.remove()
-},1000)
-
-}
+moveCar(data.country,steps);
 
 }
 
