@@ -9,73 +9,83 @@ body{
 margin:0;
 background:transparent;
 font-family:Arial;
-color:white;
 }
 
-.track{
-width:700px;
-}
-
-.row{
+/* BOARD */
+.board{
+width:360px;
 position:relative;
-height:40px;
-margin:6px 0;
-background:linear-gradient(90deg,#111,#1a1a1a);
+}
+
+/* ROW */
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+border-radius:14px;
+margin-bottom:6px;
+position:absolute;
+width:100%;
+box-sizing:border-box;
+transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+
+/* FIRST */
+.gold{
+background:linear-gradient(90deg,#d6b15f,#f2d27c);
+box-shadow:0 0 15px rgba(255,215,0,0.6);
+}
+
+/* OSTATNÉ */
+.silver{
+background:rgba(180,180,180,0.2);
+backdrop-filter:blur(6px);
+}
+
+/* CLUB */
+.club{
+display:flex;
+align-items:center;
+gap:8px;
+font-weight:bold;
+color:white;
+text-shadow:0 0 6px black,0 0 10px black;
+}
+
+/* LOGO */
+.logo{
+width:28px;
+height:28px;
+border-radius:6px;
+object-fit:cover;
+background:#222;
+}
+
+/* SCORE */
+.score{
+background:rgba(255,255,255,0.9);
+padding:4px 10px;
 border-radius:8px;
-overflow:hidden;
+color:black;
+font-weight:bold;
 }
 
-.row:nth-child(odd){
-background:linear-gradient(90deg,#151515,#222);
-}
-
-.flag{
+/* +POINTS */
+.points{
 position:absolute;
-left:5px;
-top:8px;
+right:60px;
+color:#00ff6a;
+font-weight:bold;
 font-size:18px;
+text-shadow:0 0 6px black;
+animation:pop 1s forwards;
 }
 
-.car{
-position:absolute;
-left:40px;
-top:8px;
-transition:transform 0.3s ease;
-}
-
-.finish{
-position:absolute;
-right:0;
-top:0;
-height:100%;
-width:6px;
-background:repeating-linear-gradient(
-45deg,
-white,
-white 5px,
-black 5px,
-black 10px
-);
-}
-
-.hit{
-animation:hit 0.3s;
-}
-
-@keyframes hit{
-0%{transform:scale(1)}
-50%{transform:scale(1.4)}
-100%{transform:scale(1)}
-}
-
-.win{
-animation:flash 0.5s 3;
-}
-
-@keyframes flash{
-0%{background:#0f0}
-50%{background:#fff}
-100%{background:#0f0}
+@keyframes pop{
+0%{opacity:0; transform:translateY(10px) scale(0.8);}
+50%{opacity:1; transform:translateY(-10px) scale(1.2);}
+100%{opacity:0; transform:translateY(-25px) scale(1);}
 }
 
 </style>
@@ -84,131 +94,95 @@ animation:flash 0.5s 3;
 
 <body>
 
-<div id="track" class="track"></div>
+<div id="board" class="board"></div>
 
 <script>
 
-const MAX_STEPS = 250;
+// KLUBY + SPOĽAHLIVÉ LOGÁ
+let clubs = [
 
-let countries = [
-"Slovakia","Czechia","Hungary","Poland","Germany",
-"France","Russia","Ukraine","Austria","Italy",
-"USA","China","Albania","Serbia","UK",
-"Korea","Switzerland","Indonesia","Croatia","Australia"
-];
+{name:"Real Madrid",score:0,logo:"https://wallpapercave.com/wp/wp1943881.jpg"},
+{name:"FC Barcelona",score:0,logo:"https://tse4.mm.bing.net/th/id/OIP.4eLwPDOhLiS4DWexutPB7AHaEK?rs=1&pid=ImgDetMain&o=7&rm=3"},
+{name:"Bayern Munich",score:0,logo:"https://toppng.com/uploads/preview/fc-bayern-munich-vector-logo-11574220010spcqidpuvw.png"},
+{name:"Borussia Dortmund",score:0,logo:"https://image.pngaaa.com/544/2200544-middle.png"},
+{name:"Viktoria Plzeň",score:0,logo:"https://tse4.mm.bing.net/th/id/OIP.AFI27tWcMrIi6AothmDeGwHaDr?rs=1&pid=ImgDetMain&o=7&rm=3"},
+{name:"Sparta Praha",score:0,logo:"https://static.vecteezy.com/system/resources/previews/030/738/892/non_2x/sparta-prague-club-logo-symbol-czech-republic-league-football-abstract-design-illustration-free-vector.jpg"},
+{name:"Slavia Praha",score:0,logo:"https://seeklogo.com/images/S/sk-slavia-praha-logo-77D6586C12-seeklogo.com.png"},
+{name:"Baník Ostrava",score:0,logo:"https://tse2.mm.bing.net/th/id/OIP.5Offj5A4vh0z3biGfwmvgAAAAA?rs=1&pid=ImgDetMain&o=7&rm=3"},
+{name:"MŠK Žilina",score:0,logo:"https://www.logotypes101.com/logos/33/E05866FB34C28C659C28754F4DF1CBF3/M%C5%A1k_%C5%BDilina.png"},
+{name:"Slovan Bratislava",score:0,logo:"https://th.bing.com/th/id/OIP.FMOLNpqhkI29f9fWQ-DdLgHaHk?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3"},
+{name:"Spartak Trnava",score:0,logo:"https://tse4.mm.bing.net/th/id/OIP.pqQOzXM6KRfIUoQ4hI_UzAHaHk?rs=1&pid=ImgDetMain&o=7&rm=3"},
+{name:"FC Košice",score:0,logo:"https://tse3.mm.bing.net/th/id/OIP.-kNYcPcmVfieIARABJqGzAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"},
+{name:"FC Nitra",score:0,logo:"https://th.bing.com/th/id/R.d836fb993b547b9ca32368dca9b19042?rik=i4s%2brGJzWFth6A&pid=ImgRaw&r=0"}
 
-let progress = {};
-let wins = {};
+]
 
-countries.forEach(c=>{
-progress[c]=0;
-wins[c]=0;
-});
-
-function flagEmoji(country){
-const map={
-"Slovakia":"🇸🇰",
-"Czechia":"🇨🇿",
-"Hungary":"🇭🇺",
-"Poland":"🇵🇱",
-"Germany":"🇩🇪",
-"France":"🇫🇷",
-"Russia":"🇷🇺",
-"Ukraine":"🇺🇦",
-"Austria":"🇦🇹",
-"Italy":"🇮🇹",
-"USA":"🇺🇸",
-"China":"🇨🇳",
-"Albania":"🇦🇱",
-"Serbia":"🇷🇸",
-"UK":"🇬🇧",
-"Korea":"🇰🇷",
-"Switzerland":"🇨🇭",
-"Indonesia":"🇮🇩",
-"Croatia":"🇭🇷",
-"Australia":"🇦🇺"
-};
-return map[country] || "🏳️";
-}
+const board = document.getElementById("board")
 
 function draw(){
 
-let html="";
+clubs.sort((a,b)=>b.score-a.score)
 
-countries.forEach(c=>{
+clubs.forEach((c,i)=>{
 
-html+=`
-<div class="row" id="${c}">
-<div class="flag">${flagEmoji(c)}</div>
-<div class="car" id="car-${c}">🚗</div>
-<div class="finish"></div>
+let el = document.getElementById(c.name)
+
+if(!el){
+el = document.createElement("div")
+el.id = c.name
+el.className = "row"
+
+el.innerHTML = `
+<div class="club">
+<img class="logo" src="${c.logo}" onerror="this.src='https://via.placeholder.com/28?text=?'">
+${c.name}
 </div>
-`;
+<div class="score">0</div>
+`
 
-});
+board.appendChild(el)
+}
 
-document.getElementById("track").innerHTML=html;
+el.className = i==0 ? "row gold" : "row silver"
+
+/* ANIMÁCIA PORADIA */
+el.style.transform = `translateY(${i*60}px)`
+
+el.querySelector(".score").innerText = c.score
+
+})
 
 }
 
-draw();
-
-function moveCar(country,steps){
-
-progress[country]+=steps;
-
-let percent = (progress[country]/MAX_STEPS)*100;
-
-let car = document.getElementById("car-"+country);
-
-if(car){
-
-car.style.transform = `translateX(${percent*5}px)`;
-
-car.classList.add("hit");
-setTimeout(()=>car.classList.remove("hit"),300);
-
-}
-
-if(progress[country] >= MAX_STEPS){
-
-let row = document.getElementById(country);
-
-row.classList.add("win");
-
-setTimeout(()=>{
-row.classList.remove("win");
-},1000);
-
-wins[country]++;
-
-resetRace();
-
-}
-
-}
-
-function resetRace(){
-
-countries.forEach(c=>{
-progress[c]=0;
-let car=document.getElementById("car-"+c);
-car.style.transform="translateX(0px)";
-});
-
-}
-
-const socket = new WebSocket("ws://localhost:3000");
+/* SOCKET */
+const socket = new WebSocket("ws://localhost:3000")
 
 socket.onmessage = function(event){
 
-let data = JSON.parse(event.data);
+let data = JSON.parse(event.data)
 
-let steps = data.coins * 5;
+let c = clubs.find(x=>x.name===data.club)
 
-moveCar(data.country,steps);
+if(c){
+c.score += data.points
+}
+
+draw()
+
+let el = document.getElementById(data.club)
+
+if(el){
+let pop = document.createElement("div")
+pop.className = "points"
+pop.innerText = "+"+data.points
+el.appendChild(pop)
+
+setTimeout(()=>pop.remove(),1000)
+}
 
 }
+
+draw()
 
 </script>
 
