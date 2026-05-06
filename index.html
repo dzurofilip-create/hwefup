@@ -9,11 +9,12 @@ body{
 margin:0;
 background:transparent;
 font-family:Arial;
+overflow:hidden;
 }
 
 /* BOARD */
 .board{
-width:360px;
+width:420px;
 position:relative;
 }
 
@@ -31,7 +32,7 @@ box-sizing:border-box;
 transition:transform .5s cubic-bezier(.2,.8,.2,1);
 }
 
-/* FIRST */
+/* FIRST PLACE */
 .gold{
 background:linear-gradient(90deg,#d6b15f,#f2d27c);
 box-shadow:0 0 15px rgba(255,215,0,0.6);
@@ -51,6 +52,7 @@ gap:8px;
 font-weight:bold;
 color:white;
 text-shadow:0 0 6px black,0 0 10px black;
+font-size:16px;
 }
 
 /* LOGO */
@@ -62,30 +64,65 @@ object-fit:cover;
 background:#222;
 }
 
+/* RIGHT SIDE */
+.right{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+/* TITLES */
+.titles{
+background:#000;
+padding:4px 8px;
+border-radius:8px;
+color:white;
+font-weight:bold;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:5px;
+min-width:55px;
+font-size:14px;
+}
+
 /* SCORE */
 .score{
-background:rgba(255,255,255,0.9);
+background:rgba(255,255,255,0.92);
 padding:4px 10px;
 border-radius:8px;
 color:black;
 font-weight:bold;
+min-width:65px;
+text-align:center;
+font-size:15px;
 }
 
 /* +POINTS */
 .points{
 position:absolute;
-right:60px;
+right:130px;
 color:#00ff6a;
 font-weight:bold;
 font-size:18px;
 text-shadow:0 0 6px black;
 animation:pop 1s forwards;
+pointer-events:none;
 }
 
 @keyframes pop{
-0%{opacity:0; transform:translateY(10px) scale(0.8);}
-50%{opacity:1; transform:translateY(-10px) scale(1.2);}
-100%{opacity:0; transform:translateY(-25px) scale(1);}
+0%{
+opacity:0;
+transform:translateY(10px) scale(0.8);
+}
+50%{
+opacity:1;
+transform:translateY(-10px) scale(1.2);
+}
+100%{
+opacity:0;
+transform:translateY(-25px) scale(1);
+}
 }
 
 </style>
@@ -98,27 +135,105 @@ animation:pop 1s forwards;
 
 <script>
 
-// KLUBY + SPOĽAHLIVÉ LOGÁ
+// KLUBY
 let clubs = [
 
-{name:"Real Madrid",score:0,logo:"https://wallpapercave.com/wp/wp1943881.jpg"},
-{name:"FC Barcelona",score:0,logo:"https://tse4.mm.bing.net/th/id/OIP.4eLwPDOhLiS4DWexutPB7AHaEK?rs=1&pid=ImgDetMain&o=7&rm=3"},
-{name:"Bayern Munich",score:0,logo:"https://toppng.com/uploads/preview/fc-bayern-munich-vector-logo-11574220010spcqidpuvw.png"},
-{name:"Borussia Dortmund",score:0,logo:"https://image.pngaaa.com/544/2200544-middle.png"},
-{name:"Viktoria Plzeň",score:0,logo:"https://tse4.mm.bing.net/th/id/OIP.AFI27tWcMrIi6AothmDeGwHaDr?rs=1&pid=ImgDetMain&o=7&rm=3"},
-{name:"Sparta Praha",score:0,logo:"https://static.vecteezy.com/system/resources/previews/030/738/892/non_2x/sparta-prague-club-logo-symbol-czech-republic-league-football-abstract-design-illustration-free-vector.jpg"},
-{name:"Slavia Praha",score:0,logo:"https://seeklogo.com/images/S/sk-slavia-praha-logo-77D6586C12-seeklogo.com.png"},
-{name:"Baník Ostrava",score:0,logo:"https://tse2.mm.bing.net/th/id/OIP.5Offj5A4vh0z3biGfwmvgAAAAA?rs=1&pid=ImgDetMain&o=7&rm=3"},
-{name:"MŠK Žilina",score:0,logo:"https://www.logotypes101.com/logos/33/E05866FB34C28C659C28754F4DF1CBF3/M%C5%A1k_%C5%BDilina.png"},
-{name:"Slovan Bratislava",score:0,logo:"https://th.bing.com/th/id/OIP.FMOLNpqhkI29f9fWQ-DdLgHaHk?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3"},
-{name:"Spartak Trnava",score:0,logo:"https://tse4.mm.bing.net/th/id/OIP.pqQOzXM6KRfIUoQ4hI_UzAHaHk?rs=1&pid=ImgDetMain&o=7&rm=3"},
-{name:"FC Košice",score:0,logo:"https://tse3.mm.bing.net/th/id/OIP.-kNYcPcmVfieIARABJqGzAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"},
-{name:"FC Nitra",score:0,logo:"https://th.bing.com/th/id/R.d836fb993b547b9ca32368dca9b19042?rik=i4s%2brGJzWFth6A&pid=ImgRaw&r=0"}
+{
+name:"Real Madrid",
+score:0,
+titles:15,
+logo:"https://wallpapercave.com/wp/wp1943881.jpg"
+},
+
+{
+name:"FC Barcelona",
+score:0,
+titles:5,
+logo:"https://tse4.mm.bing.net/th/id/OIP.4eLwPDOhLiS4DWexutPB7AHaEK?rs=1&pid=ImgDetMain&o=7&rm=3"
+},
+
+{
+name:"Bayern Munich",
+score:0,
+titles:6,
+logo:"https://toppng.com/uploads/preview/fc-bayern-munich-vector-logo-11574220010spcqidpuvw.png"
+},
+
+{
+name:"Borussia Dortmund",
+score:0,
+titles:1,
+logo:"https://image.pngaaa.com/544/2200544-middle.png"
+},
+
+{
+name:"Viktoria Plzeň",
+score:0,
+titles:0,
+logo:"https://tse4.mm.bing.net/th/id/OIP.AFI27tWcMrIi6AothmDeGwHaDr?rs=1&pid=ImgDetMain&o=7&rm=3"
+},
+
+{
+name:"Sparta Praha",
+score:0,
+titles:0,
+logo:"https://static.vecteezy.com/system/resources/previews/030/738/892/non_2x/sparta-prague-club-logo-symbol-czech-republic-league-football-abstract-design-illustration-free-vector.jpg"
+},
+
+{
+name:"Slavia Praha",
+score:0,
+titles:0,
+logo:"https://seeklogo.com/images/S/sk-slavia-praha-logo-77D6586C12-seeklogo.com.png"
+},
+
+{
+name:"Baník Ostrava",
+score:0,
+titles:0,
+logo:"https://tse2.mm.bing.net/th/id/OIP.5Offj5A4vh0z3biGfwmvgAAAAA?rs=1&pid=ImgDetMain&o=7&rm=3"
+},
+
+{
+name:"MŠK Žilina",
+score:0,
+titles:0,
+logo:"https://www.logotypes101.com/logos/33/E05866FB34C28C659C28754F4DF1CBF3/M%C5%A1k_%C5%BDilina.png"
+},
+
+{
+name:"Slovan Bratislava",
+score:0,
+titles:0,
+logo:"https://th.bing.com/th/id/OIP.FMOLNpqhkI29f9fWQ-DdLgHaHk?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3"
+},
+
+{
+name:"Spartak Trnava",
+score:0,
+titles:0,
+logo:"https://tse4.mm.bing.net/th/id/OIP.pqQOzXM6KRfIUoQ4hI_UzAHaHk?rs=1&pid=ImgDetMain&o=7&rm=3"
+},
+
+{
+name:"FC Košice",
+score:0,
+titles:0,
+logo:"https://tse3.mm.bing.net/th/id/OIP.-kNYcPcmVfieIARABJqGzAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
+},
+
+{
+name:"FC Nitra",
+score:0,
+titles:0,
+logo:"https://th.bing.com/th/id/R.d836fb993b547b9ca32368dca9b19042?rik=i4s%2brGJzWFth6A&pid=ImgRaw&r=0"
+}
 
 ]
 
 const board = document.getElementById("board")
 
+// DRAW
 function draw(){
 
 clubs.sort((a,b)=>b.score-a.score)
@@ -128,33 +243,48 @@ clubs.forEach((c,i)=>{
 let el = document.getElementById(c.name)
 
 if(!el){
+
 el = document.createElement("div")
 el.id = c.name
 el.className = "row"
 
 el.innerHTML = `
+
 <div class="club">
 <img class="logo" src="${c.logo}" onerror="this.src='https://via.placeholder.com/28?text=?'">
 ${c.name}
 </div>
-<div class="score">0</div>
+
+<div class="right">
+
+<div class="titles">
+🏆 ${c.titles}
+</div>
+
+<div class="score">
+${c.score}
+</div>
+
+</div>
+
 `
 
 board.appendChild(el)
+
 }
 
 el.className = i==0 ? "row gold" : "row silver"
 
-/* ANIMÁCIA PORADIA */
 el.style.transform = `translateY(${i*60}px)`
 
 el.querySelector(".score").innerText = c.score
+el.querySelector(".titles").innerHTML = `🏆 ${c.titles}`
 
 })
 
 }
 
-/* SOCKET */
+// SOCKET
 const socket = new WebSocket("ws://localhost:3000")
 
 socket.onmessage = function(event){
@@ -172,14 +302,52 @@ draw()
 let el = document.getElementById(data.club)
 
 if(el){
+
 let pop = document.createElement("div")
+
 pop.className = "points"
-pop.innerText = "+"+data.points
+pop.innerText = "+" + data.points
+
 el.appendChild(pop)
 
-setTimeout(()=>pop.remove(),1000)
+setTimeout(()=>{
+pop.remove()
+},1000)
+
 }
 
+}
+
+// 🏆 PRIDAŤ TITUL
+function addTitle(clubName, amount = 1){
+
+let club = clubs.find(c => c.name === clubName)
+
+if(!club) return
+
+club.titles += amount
+
+draw()
+
+console.log("🏆 "+clubName+" +" + amount + " titul")
+}
+
+// ❌ ODOBRAŤ TITUL
+function removeTitle(clubName, amount = 1){
+
+let club = clubs.find(c => c.name === clubName)
+
+if(!club) return
+
+club.titles -= amount
+
+if(club.titles < 0){
+club.titles = 0
+}
+
+draw()
+
+console.log("❌ "+clubName+" -" + amount + " titul")
 }
 
 draw()
