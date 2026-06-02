@@ -31,8 +31,6 @@ body{
     overflow:hidden;
 }
 
-/* BACKGROUND */
-
 body::before{
 
     content:"";
@@ -60,8 +58,6 @@ body::before{
         transform:translateY(32px);
     }
 }
-
-/* WRAPPER */
 
 .wrapper{
 
@@ -130,8 +126,6 @@ body::before{
         scale(1.02);
 }
 
-/* TOP COUNTRY */
-
 .top-country{
 
     border:2px solid gold;
@@ -154,8 +148,6 @@ body::before{
     }
 }
 
-/* LEADER */
-
 .leader{
 
     position:absolute;
@@ -175,8 +167,6 @@ body::before{
     border-radius:999px;
 }
 
-/* LEFT */
-
 .country-left{
 
     display:flex;
@@ -184,8 +174,6 @@ body::before{
 
     gap:14px;
 }
-
-/* RANK */
 
 .rank{
 
@@ -211,8 +199,6 @@ body::before{
     font-weight:800;
 }
 
-/* FLAG */
-
 .flag{
 
     width:42px;
@@ -223,8 +209,6 @@ body::before{
     border-radius:6px;
 }
 
-/* NAME */
-
 .country-name{
 
     color:white;
@@ -232,8 +216,6 @@ body::before{
     font-size:20px;
     font-weight:700;
 }
-
-/* LIVE DOT */
 
 .live-dot{
 
@@ -265,15 +247,11 @@ body::before{
     }
 }
 
-/* RIGHT */
-
 .country-right{
 
     display:flex;
     gap:18px;
 }
-
-/* SCORE */
 
 .score,
 .gift{
@@ -311,9 +289,9 @@ body::before{
 
 .controls{
 
-    width:280px;
+    width:320px;
 
-    padding:20px;
+    padding:24px;
 
     border-radius:24px;
 
@@ -325,6 +303,8 @@ body::before{
         );
 
     border:2px solid rgba(255,255,255,.08);
+
+    height:fit-content;
 }
 
 .controls h2{
@@ -334,23 +314,56 @@ body::before{
     margin-bottom:20px;
 }
 
-/* BUTTONS */
+.controls label{
 
-.manual-btn{
+    color:white;
+
+    font-size:14px;
+
+    display:block;
+
+    margin-bottom:8px;
+}
+
+.controls select,
+.controls input{
 
     width:100%;
 
-    height:46px;
+    height:48px;
 
     border:none;
 
     border-radius:14px;
 
-    margin-bottom:12px;
+    margin-bottom:18px;
+
+    padding:0 14px;
+
+    font-size:15px;
+
+    background:rgba(255,255,255,.08);
+
+    color:white;
+}
+
+.controls option{
+    color:black;
+}
+
+.manual-btn{
+
+    width:100%;
+
+    height:52px;
+
+    border:none;
+
+    border-radius:14px;
 
     color:white;
 
-    font-size:15px;
+    font-size:16px;
     font-weight:700;
 
     cursor:pointer;
@@ -361,6 +374,8 @@ body::before{
             #00c6ff,
             #0072ff
         );
+
+    transition:.3s;
 }
 
 .manual-btn:hover{
@@ -385,47 +400,51 @@ body::before{
 
 </div>
 
-<!-- MANUAL CONTROL -->
+<!-- CONTROL PANEL -->
 
 <div class="controls">
 
-<h2>
-🎮 Manuálne body
-</h2>
+<h2>🎮 Ovládací panel</h2>
+
+<label>Krajina</label>
+
+<select id="countrySelect">
+
+<option value="Slovensko">🇸🇰 Slovensko</option>
+<option value="Nemecko">🇩🇪 Nemecko</option>
+<option value="Rakúsko">🇦🇹 Rakúsko</option>
+<option value="Česko">🇨🇿 Česko</option>
+<option value="Maďarsko">🇭🇺 Maďarsko</option>
+<option value="Chorvátsko">🇭🇷 Chorvátsko</option>
+<option value="Poľsko">🇵🇱 Poľsko</option>
+<option value="Ukrajina">🇺🇦 Ukrajina</option>
+<option value="Srbsko">🇷🇸 Srbsko</option>
+<option value="Albánsko">🇦🇱 Albánsko</option>
+
+</select>
+
+<label>Typ</label>
+
+<select id="typeSelect">
+
+<option value="score">Body</option>
+<option value="gifts">Tituly</option>
+
+</select>
+
+<label>Koľko pridať</label>
+
+<input
+    type="number"
+    id="amountInput"
+    placeholder="Napr. 500"
+/>
 
 <button
     class="manual-btn"
-    onclick="addPoints('Slovensko',500,1)"
+    onclick="manualAdd()"
 >
-🇸🇰 +500 Slovensko
-</button>
-
-<button
-    class="manual-btn"
-    onclick="addPoints('Česko',500,1)"
->
-🇨🇿 +500 Česko
-</button>
-
-<button
-    class="manual-btn"
-    onclick="addPoints('Poľsko',500,1)"
->
-🇵🇱 +500 Poľsko
-</button>
-
-<button
-    class="manual-btn"
-    onclick="addPoints('Maďarsko',500,1)"
->
-🇭🇺 +500 Maďarsko
-</button>
-
-<button
-    class="manual-btn"
-    onclick="addPoints('Nemecko',500,1)"
->
-🇩🇪 +500 Nemecko
+➕ Pridať
 </button>
 
 </div>
@@ -434,21 +453,31 @@ body::before{
 
 <script>
 
-/* ========================= */
-/* SOCKET.IO */
-/* ========================= */
+/* SOCKET */
 
 const socket = io();
 
-/* ========================= */
 /* COUNTRIES */
-/* ========================= */
 
 const countries = [
 
 {
     name:"Slovensko",
     code:"sk",
+    score:0,
+    gifts:0
+},
+
+{
+    name:"Nemecko",
+    code:"de",
+    score:0,
+    gifts:0
+},
+
+{
+    name:"Rakúsko",
+    code:"at",
     score:0,
     gifts:0
 },
@@ -461,13 +490,6 @@ const countries = [
 },
 
 {
-    name:"Poľsko",
-    code:"pl",
-    score:0,
-    gifts:0
-},
-
-{
     name:"Maďarsko",
     code:"hu",
     score:0,
@@ -475,17 +497,43 @@ const countries = [
 },
 
 {
-    name:"Nemecko",
-    code:"de",
+    name:"Chorvátsko",
+    code:"hr",
+    score:0,
+    gifts:0
+},
+
+{
+    name:"Poľsko",
+    code:"pl",
+    score:0,
+    gifts:0
+},
+
+{
+    name:"Ukrajina",
+    code:"ua",
+    score:0,
+    gifts:0
+},
+
+{
+    name:"Srbsko",
+    code:"rs",
+    score:0,
+    gifts:0
+},
+
+{
+    name:"Albánsko",
+    code:"al",
     score:0,
     gifts:0
 }
 
 ];
 
-/* ========================= */
 /* RENDER */
-/* ========================= */
 
 function renderLeaderboard(){
 
@@ -557,11 +605,22 @@ function renderLeaderboard(){
     });
 }
 
-/* ========================= */
-/* ADD POINTS */
-/* ========================= */
+/* MANUAL ADD */
 
-function addPoints(countryName,points,gifts=1){
+function manualAdd(){
+
+    const countryName =
+        document.getElementById("countrySelect").value;
+
+    const type =
+        document.getElementById("typeSelect").value;
+
+    const amount =
+        parseInt(
+            document.getElementById("amountInput").value
+        );
+
+    if(!amount || amount <= 0) return;
 
     const country =
         countries.find(
@@ -570,29 +629,34 @@ function addPoints(countryName,points,gifts=1){
 
     if(!country) return;
 
-    country.score += points;
-    country.gifts += gifts;
+    if(type === "score"){
+
+        country.score += amount;
+
+    }else{
+
+        country.gifts += amount;
+
+    }
 
     renderLeaderboard();
+
+    /* POSLANIE DO LIVE.JS */
+
+    socket.emit("manualUpdate",{
+
+        country:countryName,
+        type:type,
+        amount:amount
+
+    });
+
 }
 
-/* ========================= */
-/* SOCKET EVENTS */
-/* ========================= */
+/* ŽIADNE AUTOMATICKÉ PRIDÁVANIE */
+/* odstránené socket.on("gift") */
 
-socket.on("gift",(data)=>{
-
-    addPoints(
-        data.country,
-        data.points,
-        data.gifts
-    );
-
-});
-
-/* ========================= */
 /* FIRST RENDER */
-/* ========================= */
 
 renderLeaderboard();
 
