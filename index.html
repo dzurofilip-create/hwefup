@@ -1,293 +1,344 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>TikTok LIVE Country Battle</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
-body{
+*{
     margin:0;
-    background:transparent;
-    font-family:Arial;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+
+    background:
+        radial-gradient(circle at top left,#1e3c72,#0f172a 60%);
+
+    min-height:100vh;
+
+    padding:30px;
+
     overflow:hidden;
 }
 
-.board{
-    width:520px;
-    position:relative;
+/* BACKGROUND PARTICLES */
+
+body::before{
+    content:"";
+
+    position:fixed;
+    inset:0;
+
+    background-image:
+        radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px);
+
+    background-size:35px 35px;
+
+    animation:moveBg 20s linear infinite;
+
+    pointer-events:none;
 }
 
-/* ROW */
+@keyframes moveBg{
+    from{
+        transform:translateY(0px);
+    }
+    to{
+        transform:translateY(35px);
+    }
+}
 
-.row{
+/* CONTAINER */
+
+.container{
+    width:500px;
+}
+
+/* TITLE */
+
+.title{
+    font-size:38px;
+    font-weight:800;
+
+    color:white;
+
+    margin-bottom:25px;
+
+    text-shadow:
+        0 0 15px rgba(0,255,255,.5);
+}
+
+/* COUNTRY CARD */
+
+.country-card{
+
+    position:relative;
+
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:12px 14px;
-    border-radius:18px;
-    margin-bottom:8px;
-    position:absolute;
+
     width:100%;
-    box-sizing:border-box;
-    transition:all .45s cubic-bezier(.2,.8,.2,1);
 
-    background:linear-gradient(
-        135deg,
-        rgba(20,35,55,0.92),
-        rgba(35,65,95,0.88)
-    );
+    padding:16px 22px;
 
-    border:1px solid rgba(120,220,255,0.35);
+    margin-bottom:16px;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(36,59,85,.95),
+            rgba(20,30,48,.95)
+        );
+
+    border:2px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(12px);
 
     box-shadow:
-    0 0 15px rgba(0,180,255,0.15),
-    inset 0 0 25px rgba(255,255,255,0.03);
+        0 0 20px rgba(0,170,255,.18),
+        inset 0 0 12px rgba(255,255,255,.05);
+
+    transition:.25s ease;
 }
 
-/* FIRST */
-
-.gold{
-
-    background:linear-gradient(
-        135deg,
-        rgba(40,70,120,0.98),
-        rgba(0,180,255,0.92)
-    );
-
-    border:1px solid rgba(255,255,255,0.35);
+.country-card:hover{
+    transform:
+        translateY(-4px)
+        scale(1.02);
 
     box-shadow:
-    0 0 25px rgba(0,200,255,0.55),
-    0 0 60px rgba(0,140,255,0.25);
+        0 0 30px rgba(0,200,255,.35);
+}
 
-    transform:scale(1.02);
+/* TOP COUNTRY SPECIAL */
+
+.top-country{
+
+    border:2px solid gold;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,174,0,.18),
+            rgba(20,30,48,.98)
+        );
+
+    animation:pulse 1.6s infinite;
+}
+
+@keyframes pulse{
+
+    0%{
+        box-shadow:
+            0 0 10px gold;
+    }
+
+    50%{
+        box-shadow:
+            0 0 35px gold;
+    }
+
+    100%{
+        box-shadow:
+            0 0 10px gold;
+    }
 }
 
 /* LEFT */
 
-.club{
+.country-left{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:14px;
+}
+
+.rank{
+    width:34px;
+    height:34px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:800;
+    font-size:14px;
 
     color:white;
 
-    font-weight:bold;
+    background:
+        linear-gradient(135deg,#ff00cc,#3333ff);
 
-    font-size:19px;
-
-    text-shadow:
-    0 0 6px rgba(0,0,0,0.7);
+    box-shadow:
+        0 0 15px rgba(255,0,204,.5);
 }
 
 /* FLAG */
 
 .flag{
-    font-size:28px;
-    filter:drop-shadow(0 0 6px rgba(255,255,255,0.25));
-}
 
-/* RIGHT */
+    width:42px;
+    height:30px;
 
-.right{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
+    object-fit:cover;
 
-/* SCORE */
-
-.score{
-
-    background:rgba(255,255,255,0.12);
-
-    border:1px solid rgba(255,255,255,0.15);
-
-    backdrop-filter:blur(6px);
-
-    padding:6px 12px;
-
-    border-radius:12px;
-
-    color:#ffffff;
-
-    font-weight:bold;
-
-    min-width:90px;
-
-    text-align:center;
-
-    font-size:16px;
+    border-radius:6px;
 
     box-shadow:
-    inset 0 0 10px rgba(255,255,255,0.03),
-    0 0 12px rgba(0,0,0,0.25);
+        0 0 12px rgba(255,255,255,.25);
 }
 
-/* TITLES */
+/* NAME */
 
-.titles{
+.country-name{
 
-    background:rgba(255,255,255,0.12);
-
-    border:1px solid rgba(255,255,255,0.15);
-
-    backdrop-filter:blur(6px);
-
-    padding:6px 12px;
-
-    border-radius:12px;
-
-    color:#ffffff;
-
-    font-weight:bold;
-
-    min-width:70px;
-
-    text-align:center;
-
-    font-size:15px;
-
-    box-shadow:
-    inset 0 0 10px rgba(255,255,255,0.03),
-    0 0 12px rgba(0,0,0,0.25);
-}
-
-/* POPUP */
-
-.points{
-    position:absolute;
-
-    right:180px;
-
-    color:#79ffb0;
-
-    font-weight:bold;
+    color:white;
 
     font-size:20px;
+    font-weight:700;
 
-    text-shadow:
-    0 0 8px black;
-
-    animation:pop 1s forwards;
-
-    pointer-events:none;
+    letter-spacing:.5px;
 }
 
-@keyframes pop{
+/* RIGHT SIDE */
 
-    0%{
-        opacity:0;
-        transform:translateY(10px) scale(0.7);
-    }
-
-    40%{
-        opacity:1;
-        transform:translateY(-12px) scale(1.2);
-    }
-
-    100%{
-        opacity:0;
-        transform:translateY(-35px) scale(1);
-    }
-
-}
-
-/* CONTROL PANEL */
-
-.panel{
-
-    position:absolute;
-
-    top:680px;
-
-    width:520px;
-
-    padding:14px;
-
-    border-radius:18px;
-
-    background:linear-gradient(
-        135deg,
-        rgba(15,30,50,0.96),
-        rgba(25,55,90,0.92)
-    );
-
-    border:1px solid rgba(120,220,255,0.25);
-
-    box-sizing:border-box;
-
-    box-shadow:
-    0 0 25px rgba(0,140,255,0.18);
-}
-
-.panel-title{
-
-    color:white;
-
-    font-weight:bold;
-
-    margin-bottom:12px;
-
-    font-size:18px;
-}
-
-.panel-row{
-
+.country-right{
     display:flex;
+    align-items:center;
 
-    gap:8px;
+    gap:22px;
 }
 
-select,
-input{
+/* BUTTONS */
 
-    flex:1;
+.score,
+.gift{
 
-    background:rgba(255,255,255,0.08);
-
-    border:1px solid rgba(255,255,255,0.15);
-
-    color:white;
-
-    border-radius:10px;
-
-    padding:10px;
-
-    outline:none;
-
-    font-size:14px;
-}
-
-button{
-
-    background:linear-gradient(
-        135deg,
-        #00bfff,
-        #0078ff
-    );
+    min-width:90px;
+    height:46px;
 
     border:none;
 
+    border-radius:14px;
+
     color:white;
 
-    padding:10px 16px;
-
-    border-radius:10px;
-
-    font-weight:bold;
+    font-size:16px;
+    font-weight:700;
 
     cursor:pointer;
 
-    transition:.2s;
+    transition:.25s;
 }
 
-button:hover{
+.score{
 
-    transform:scale(1.05);
+    background:
+        rgba(255,255,255,.08);
+
+    backdrop-filter:blur(10px);
 
     box-shadow:
-    0 0 15px rgba(0,180,255,0.45);
+        inset 0 0 8px rgba(255,255,255,.08),
+        0 0 10px rgba(0,0,0,.25);
+}
+
+.score:hover{
+    transform:scale(1.06);
+}
+
+/* GIFT BUTTON */
+
+.gift{
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffcc00,
+            #ff6f00
+        );
+
+    box-shadow:
+        0 0 18px rgba(255,170,0,.5);
+}
+
+.gift:hover{
+
+    transform:scale(1.08);
+
+    box-shadow:
+        0 0 28px rgba(255,170,0,.8);
+}
+
+/* LEADER TEXT */
+
+.leader-tag{
+
+    position:absolute;
+
+    top:-10px;
+    right:20px;
+
+    background:gold;
+
+    color:black;
+
+    font-size:12px;
+    font-weight:800;
+
+    padding:5px 12px;
+
+    border-radius:999px;
+
+    box-shadow:
+        0 0 15px gold;
+}
+
+/* LIVE DOT */
+
+.live-dot{
+
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+    background:#00ff66;
+
+    box-shadow:
+        0 0 15px #00ff66;
+
+    animation:livePulse 1s infinite;
+}
+
+@keyframes livePulse{
+
+    0%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+    50%{
+        transform:scale(1.6);
+        opacity:.5;
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
 }
 
 </style>
@@ -295,303 +346,194 @@ button:hover{
 
 <body>
 
-<div id="board" class="board"></div>
+<div class="container">
 
-<div class="panel">
-
-    <div class="panel-title">
-        ADMIN PANEL
+    <div class="title">
+        🌍 LIVE COUNTRY BATTLE
     </div>
 
-    <div class="panel-row">
+    <!-- SLOVAKIA -->
 
-        <select id="countrySelect"></select>
+    <div class="country-card top-country">
 
-        <input id="pointsInput" type="number" placeholder="Points">
+        <div class="leader-tag">
+            👑 LEADER
+        </div>
 
-        <button onclick="addPoints()">
-            ADD POINTS
-        </button>
+        <div class="country-left">
+
+            <div class="rank">
+                #1
+            </div>
+
+            <img
+                class="flag"
+                src="https://flagcdn.com/w80/sk.png"
+            >
+
+            <div class="country-name">
+                Slovakia
+            </div>
+
+            <div class="live-dot"></div>
+
+        </div>
+
+        <div class="country-right">
+
+            <button class="score">
+                1500
+            </button>
+
+            <button class="gift">
+                🏆 89
+            </button>
+
+        </div>
 
     </div>
 
-    <br>
+    <!-- CZECHIA -->
 
-    <div class="panel-row">
+    <div class="country-card">
 
-        <select id="titleSelect"></select>
+        <div class="country-left">
 
-        <input id="titlesInput" type="number" placeholder="Titles">
+            <div class="rank">
+                #2
+            </div>
 
-        <button onclick="addTitles()">
-            ADD TITLES
-        </button>
+            <img
+                class="flag"
+                src="https://flagcdn.com/w80/cz.png"
+            >
+
+            <div class="country-name">
+                Czechia
+            </div>
+
+        </div>
+
+        <div class="country-right">
+
+            <button class="score">
+                1100
+            </button>
+
+            <button class="gift">
+                🏆 52
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- POLAND -->
+
+    <div class="country-card">
+
+        <div class="country-left">
+
+            <div class="rank">
+                #3
+            </div>
+
+            <img
+                class="flag"
+                src="https://flagcdn.com/w80/pl.png"
+            >
+
+            <div class="country-name">
+                Poland
+            </div>
+
+        </div>
+
+        <div class="country-right">
+
+            <button class="score">
+                980
+            </button>
+
+            <button class="gift">
+                🏆 44
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- HUNGARY -->
+
+    <div class="country-card">
+
+        <div class="country-left">
+
+            <div class="rank">
+                #4
+            </div>
+
+            <img
+                class="flag"
+                src="https://flagcdn.com/w80/hu.png"
+            >
+
+            <div class="country-name">
+                Hungary
+            </div>
+
+        </div>
+
+        <div class="country-right">
+
+            <button class="score">
+                770
+            </button>
+
+            <button class="gift">
+                🏆 32
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- GERMANY -->
+
+    <div class="country-card">
+
+        <div class="country-left">
+
+            <div class="rank">
+                #5
+            </div>
+
+            <img
+                class="flag"
+                src="https://flagcdn.com/w80/de.png"
+            >
+
+            <div class="country-name">
+                Germany
+            </div>
+
+        </div>
+
+        <div class="country-right">
+
+            <button class="score">
+                600
+            </button>
+
+            <button class="gift">
+                🏆 21
+            </button>
+
+        </div>
 
     </div>
 
 </div>
-
-<script>
-
-let clubs = [
-
-{
-    name:"Slovakia",
-    flag:"🇸🇰",
-    score:0,
-    titles:0
-},
-
-{
-    name:"Czechia",
-    flag:"🇨🇿",
-    score:0,
-    titles:0
-},
-
-{
-    name:"Poland",
-    flag:"🇵🇱",
-    score:0,
-    titles:0
-},
-
-{
-    name:"Hungary",
-    flag:"🇭🇺",
-    score:0,
-    titles:0
-},
-
-{
-    name:"Ukraine",
-    flag:"🇺🇦",
-    score:0,
-    titles:0
-},
-
-{
-    name:"Serbia",
-    flag:"🇷🇸",
-    score:0,
-    titles:0
-},
-
-{
-    name:"Germany",
-    flag:"🇩🇪",
-    score:0,
-    titles:0
-},
-
-{
-    name:"Croatia",
-    flag:"🇭🇷",
-    score:0,
-    titles:0
-},
-
-{
-    name:"Austria",
-    flag:"🇦🇹",
-    score:0,
-    titles:0
-},
-
-{
-    name:"Albania",
-    flag:"🇦🇱",
-    score:0,
-    titles:0
-}
-
-]
-
-const board = document.getElementById("board")
-
-function draw(){
-
-    clubs.sort((a,b)=>b.score-a.score)
-
-    clubs.forEach((c,i)=>{
-
-        let el = document.getElementById(c.name)
-
-        if(!el){
-
-            el = document.createElement("div")
-
-            el.id = c.name
-
-            el.className = "row"
-
-            el.innerHTML = `
-
-                <div class="club">
-
-                    <div class="flag">
-                        ${c.flag}
-                    </div>
-
-                    ${c.name}
-
-                </div>
-
-                <div class="right">
-
-                    <div class="score">
-                        ${c.score}
-                    </div>
-
-                    <div class="titles">
-                        🏆 ${c.titles}
-                    </div>
-
-                </div>
-
-            `
-
-            board.appendChild(el)
-        }
-
-        el.className = i == 0 ? "row gold" : "row"
-
-        el.style.transform = `translateY(${i * 68}px)`
-
-        el.querySelector(".score").innerText = c.score
-
-        el.querySelector(".titles").innerHTML = `🏆 ${c.titles}`
-
-    })
-
-}
-
-const socket = new WebSocket("ws://localhost:3000")
-
-socket.onmessage = function(event){
-
-    let data = JSON.parse(event.data)
-
-    let c = clubs.find(x => x.name === data.country)
-
-    if(c){
-
-        c.score += data.points
-
-    }
-
-    draw()
-
-    if(c){
-
-        let el = document.getElementById(c.name)
-
-        if(el){
-
-            let pop = document.createElement("div")
-
-            pop.className = "points"
-
-            pop.innerText = "+" + data.points
-
-            el.appendChild(pop)
-
-            setTimeout(()=>{
-
-                pop.remove()
-
-            },1000)
-
-        }
-
-    }
-
-}
-
-/* ADMIN */
-
-const countrySelect = document.getElementById("countrySelect")
-const titleSelect = document.getElementById("titleSelect")
-
-clubs.forEach(c=>{
-
-    countrySelect.innerHTML += `
-        <option value="${c.name}">
-            ${c.flag} ${c.name}
-        </option>
-    `
-
-    titleSelect.innerHTML += `
-        <option value="${c.name}">
-            ${c.flag} ${c.name}
-        </option>
-    `
-
-})
-
-function addPoints(){
-
-    const country = countrySelect.value
-
-    const points = parseInt(
-        document.getElementById("pointsInput").value
-    )
-
-    if(!points) return
-
-    let c = clubs.find(x=>x.name === country)
-
-    if(!c) return
-
-    c.score += points
-
-    draw()
-
-    let el = document.getElementById(c.name)
-
-    if(el){
-
-        let pop = document.createElement("div")
-
-        pop.className = "points"
-
-        pop.innerText = "+" + points
-
-        el.appendChild(pop)
-
-        setTimeout(()=>{
-
-            pop.remove()
-
-        },1000)
-
-    }
-
-}
-
-function addTitles(){
-
-    const country = titleSelect.value
-
-    const titles = parseInt(
-        document.getElementById("titlesInput").value
-    )
-
-    if(!titles) return
-
-    let c = clubs.find(x=>x.name === country)
-
-    if(!c) return
-
-    c.titles += titles
-
-    draw()
-
-}
-
-draw()
-
-</script>
 
 </body>
 </html>
