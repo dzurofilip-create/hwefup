@@ -17,6 +17,7 @@
 }
 
 body{
+
     font-family:'Poppins',sans-serif;
 
     background:
@@ -32,6 +33,7 @@ body{
 /* BACKGROUND */
 
 body::before{
+
     content:"";
 
     position:fixed;
@@ -60,6 +62,15 @@ body::before{
 
 /* MAIN */
 
+.wrapper{
+
+    display:flex;
+    align-items:flex-start;
+    gap:30px;
+}
+
+/* LEADERBOARD */
+
 .container{
     width:520px;
 }
@@ -82,10 +93,6 @@ body::before{
 
     text-shadow:
         0 0 20px rgba(0,255,255,.35);
-}
-
-.title-icon{
-    font-size:34px;
 }
 
 /* CARD */
@@ -121,9 +128,7 @@ body::before{
         0 0 18px rgba(0,170,255,.15),
         inset 0 0 10px rgba(255,255,255,.03);
 
-    transition:
-        transform .35s,
-        box-shadow .35s;
+    transition:.35s;
 }
 
 .country-card:hover{
@@ -142,27 +147,21 @@ body::before{
 
     border:2px solid gold;
 
-    box-shadow:
-        0 0 25px rgba(255,215,0,.5);
-
-    animation:pulse 1.6s infinite;
+    animation:pulse 1.5s infinite;
 }
 
 @keyframes pulse{
 
     0%{
-        box-shadow:
-            0 0 10px gold;
+        box-shadow:0 0 10px gold;
     }
 
     50%{
-        box-shadow:
-            0 0 30px gold;
+        box-shadow:0 0 30px gold;
     }
 
     100%{
-        box-shadow:
-            0 0 10px gold;
+        box-shadow:0 0 10px gold;
     }
 }
 
@@ -185,12 +184,9 @@ body::before{
     padding:5px 12px;
 
     border-radius:999px;
-
-    box-shadow:
-        0 0 14px gold;
 }
 
-/* LEFT SIDE */
+/* LEFT */
 
 .country-left{
 
@@ -244,7 +240,7 @@ body::before{
         0 0 10px rgba(255,255,255,.25);
 }
 
-/* COUNTRY NAME */
+/* NAME */
 
 .country-name{
 
@@ -278,7 +274,7 @@ body::before{
     }
 
     50%{
-        transform:scale(1.6);
+        transform:scale(1.5);
     }
 
     100%{
@@ -286,7 +282,7 @@ body::before{
     }
 }
 
-/* RIGHT SIDE */
+/* RIGHT */
 
 .country-right{
 
@@ -296,31 +292,9 @@ body::before{
     gap:18px;
 }
 
-/* SCORE */
+/* BUTTONS */
 
-.score{
-
-    min-width:90px;
-    height:44px;
-
-    border:none;
-
-    border-radius:14px;
-
-    color:white;
-
-    font-size:15px;
-    font-weight:700;
-
-    background:
-        rgba(255,255,255,.08);
-
-    box-shadow:
-        inset 0 0 8px rgba(255,255,255,.05);
-}
-
-/* GIFT */
-
+.score,
 .gift{
 
     min-width:90px;
@@ -334,6 +308,19 @@ body::before{
 
     font-size:15px;
     font-weight:700;
+}
+
+/* SCORE */
+
+.score{
+
+    background:
+        rgba(255,255,255,.08);
+}
+
+/* GIFT */
+
+.gift{
 
     background:
         linear-gradient(
@@ -346,23 +333,125 @@ body::before{
         0 0 16px rgba(255,170,0,.45);
 }
 
-/* SMOOTH MOVE */
+/* CONTROL PANEL */
 
-.country-card{
-    animation:fadeIn .35s;
+.controls{
+
+    width:280px;
+
+    padding:20px;
+
+    border-radius:24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(25,35,55,.96),
+            rgba(10,15,25,.96)
+        );
+
+    border:2px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 0 20px rgba(0,170,255,.15);
 }
 
-@keyframes fadeIn{
+.controls h2{
 
-    from{
-        opacity:0;
-        transform:translateY(10px);
-    }
+    color:white;
 
-    to{
-        opacity:1;
-        transform:translateY(0px);
-    }
+    margin-bottom:20px;
+
+    font-size:24px;
+}
+
+.control-group{
+
+    margin-bottom:16px;
+}
+
+label{
+
+    color:white;
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:14px;
+}
+
+select,
+input{
+
+    width:100%;
+
+    height:44px;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:0 14px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    color:white;
+
+    font-size:15px;
+}
+
+.control-buttons{
+
+    display:flex;
+    gap:12px;
+
+    margin-top:20px;
+}
+
+.add-btn{
+
+    flex:1;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:14px;
+
+    color:white;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00c6ff,
+            #0072ff
+        );
+
+    box-shadow:
+        0 0 18px rgba(0,150,255,.4);
+
+    transition:.25s;
+}
+
+.add-btn:hover{
+
+    transform:scale(1.05);
+}
+
+.gift-btn{
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffcc00,
+            #ff8800
+        );
 }
 
 </style>
@@ -370,21 +459,105 @@ body::before{
 
 <body>
 
+<div class="wrapper">
+
+<!-- LEADERBOARD -->
+
 <div class="container">
 
 <div class="title">
-<div class="title-icon">🌍</div>
-<div>LIVE SÚBOJ KRAJÍN</div>
+🌍 LIVE SÚBOJ KRAJÍN
 </div>
 
 <div id="leaderboard"></div>
 
 </div>
 
+<!-- CONTROL PANEL -->
+
+<div class="controls">
+
+<h2>
+🎮 Ovládanie
+</h2>
+
+<div class="control-group">
+
+<label>
+Krajina
+</label>
+
+<select id="countrySelect">
+
+<option>Slovensko</option>
+<option>Česko</option>
+<option>Poľsko</option>
+<option>Maďarsko</option>
+<option>Ukrajina</option>
+<option>Nemecko</option>
+<option>Chorvátsko</option>
+<option>Srbsko</option>
+<option>Rakúsko</option>
+<option>Albánsko</option>
+
+</select>
+
+</div>
+
+<div class="control-group">
+
+<label>
+Body
+</label>
+
+<input
+    type="number"
+    id="pointsInput"
+    value="100"
+/>
+
+</div>
+
+<div class="control-group">
+
+<label>
+Gifty
+</label>
+
+<input
+    type="number"
+    id="giftInput"
+    value="1"
+/>
+
+</div>
+
+<div class="control-buttons">
+
+<button
+    class="add-btn"
+    onclick="manualAddPoints()"
+>
++ BODY
+</button>
+
+<button
+    class="add-btn gift-btn"
+    onclick="manualAddGift()"
+>
+🏆 GIFT
+</button>
+
+</div>
+
+</div>
+
+</div>
+
 <script>
 
 /* ========================= */
-/* KRAJINY */
+/* COUNTRIES */
 /* ========================= */
 
 const countries = [
@@ -539,7 +712,7 @@ function renderLeaderboard(){
 /* ADD POINTS */
 /* ========================= */
 
-function addPoints(countryName,points,gifts=1){
+function addPoints(countryName,points,gifts=0){
 
     const country =
         countries.find(
@@ -548,10 +721,39 @@ function addPoints(countryName,points,gifts=1){
 
     if(!country) return;
 
-    country.score += points;
-    country.gifts += gifts;
+    country.score += Number(points);
+    country.gifts += Number(gifts);
 
     renderLeaderboard();
+}
+
+/* ========================= */
+/* MANUAL BUTTONS */
+/* ========================= */
+
+function manualAddPoints(){
+
+    const country =
+        document.getElementById("countrySelect").value;
+
+    const points =
+        document.getElementById("pointsInput").value;
+
+    addPoints(country,points,0);
+}
+
+function manualAddGift(){
+
+    const country =
+        document.getElementById("countrySelect").value;
+
+    const gifts =
+        document.getElementById("giftInput").value;
+
+    const points =
+        gifts * 100;
+
+    addPoints(country,points,gifts);
 }
 
 /* ========================= */
@@ -560,37 +762,15 @@ function addPoints(countryName,points,gifts=1){
 
 renderLeaderboard();
 
-/* ========================= */
-/* TEST AUTO BATTLE */
-/* ZMAŽ KEĎ NAPOJÍŠ LIVE.JS */
-/* ========================= */
-
-setInterval(()=>{
-
-    const randomCountry =
-        countries[
-            Math.floor(
-                Math.random() * countries.length
-            )
-        ];
-
-    randomCountry.score +=
-        Math.floor(Math.random() * 250);
-
-    randomCountry.gifts +=
-        Math.floor(Math.random() * 4);
-
-    renderLeaderboard();
-
-},2000);
-
-/* ========================= */
-/* LIVE.JS PRÍKLAD */
-/* ========================= */
+/* ======================================= */
+/* LIVE.JS */
+/* ======================================= */
 
 /*
 
-Keď príde gift:
+SEM NAPOJÍŠ SVOJ live.js
+
+Príklad:
 
 addPoints(
     "Slovensko",
@@ -598,13 +778,11 @@ addPoints(
     1
 );
 
-alebo:
-
-addPoints(
-    "Česko",
-    1200,
-    3
-);
+Keď príde gift:
+- pridá body
+- pridá gift
+- automaticky presortuje krajiny
+- leader sa zmení
 
 */
 
