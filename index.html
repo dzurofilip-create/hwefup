@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 
 <style>
+
 body{
     margin:0;
     background:transparent;
@@ -11,13 +12,11 @@ body{
     overflow:hidden;
 }
 
-/* BOARD */
 .board{
     width:470px;
     position:relative;
 }
 
-/* ROW */
 .row{
     display:flex;
     justify-content:space-between;
@@ -31,46 +30,41 @@ body{
     transition:transform .5s cubic-bezier(.2,.8,.2,1);
 }
 
-/* FIRST */
 .gold{
     background:linear-gradient(90deg,#d6b15f,#f2d27c);
     box-shadow:0 0 15px rgba(255,215,0,0.6);
 }
 
-/* OSTATNÉ */
 .silver{
     background:rgba(180,180,180,0.2);
     backdrop-filter:blur(6px);
 }
 
-/* LEFT */
 .club{
     display:flex;
     align-items:center;
-    gap:8px;
+    gap:10px;
     font-weight:bold;
     color:white;
     text-shadow:0 0 6px black,0 0 10px black;
-    font-size:16px;
+    font-size:18px;
 }
 
-/* LOGO */
 .logo{
-    width:28px;
-    height:28px;
-    border-radius:6px;
-    object-fit:cover;
-    background:#222;
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
 }
 
-/* RIGHT SIDE */
 .right{
     display:flex;
     align-items:center;
     gap:8px;
 }
 
-/* SCORE BOX */
 .score{
     background:rgba(255,255,255,0.92);
     padding:4px 10px;
@@ -83,7 +77,6 @@ body{
     box-shadow:0 0 10px rgba(0,0,0,0.25);
 }
 
-/* TITLES BOX */
 .titles{
     background:rgba(255,255,255,0.92);
     padding:4px 10px;
@@ -96,7 +89,6 @@ body{
     box-shadow:0 0 10px rgba(0,0,0,0.25);
 }
 
-/* +POINTS */
 .points{
     position:absolute;
     right:155px;
@@ -109,6 +101,7 @@ body{
 }
 
 @keyframes pop{
+
     0%{
         opacity:0;
         transform:translateY(10px) scale(0.8);
@@ -123,7 +116,9 @@ body{
         opacity:0;
         transform:translateY(-25px) scale(1);
     }
+
 }
+
 </style>
 </head>
 
@@ -133,62 +128,78 @@ body{
 
 <script>
 
-// AUTÁ
 let clubs = [
+
 {
-    name:"Mercedes",
+    name:"Slovakia",
+    emoji:"🇸🇰",
     score:0,
-    titles:1,
-    logo:"https://tse4.mm.bing.net/th/id/OIP.wkLvFpUG07C_FZk3ujUqMwHaDl?w=2272&h=1101&rs=1&pid=ImgDetMain&o=7&rm=3"
+    titles:1
 },
+
 {
-    name:"Volkswagen",
+    name:"Czechia",
+    emoji:"🇨🇿",
     score:0,
-    titles:0,
-    logo:"https://tse2.mm.bing.net/th/id/OIP.2U5F3w5xfwpVzucgmZov_wHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
+    titles:0
 },
+
 {
-    name:"BMW",
+    name:"Poland",
+    emoji:"🇵🇱",
     score:0,
-    titles:0,
-    logo:"https://tse2.mm.bing.net/th/id/OIP.malVCsgPOQltM9WSNJQr0gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
+    titles:0
 },
+
 {
-    name:"Volvo",
+    name:"Hungary",
+    emoji:"🇭🇺",
     score:0,
-    titles:0,
-    logo:"https://th.bing.com/th/id/OIP.Kbp3gng1wI1tWSFALCvvVQHaFC?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3"
+    titles:0
 },
+
 {
-    name:"Škoda",
+    name:"Ukraine",
+    emoji:"🇺🇦",
     score:0,
-    titles:0,
-    logo:"https://cdn.vectorstock.com/i/preview-1x/30/64/skoda-brand-logo-car-symbol-with-name-green-design-vector-46153064.jpg"
+    titles:0
 },
+
 {
-    name:"Audi",
+    name:"Serbia",
+    emoji:"🇷🇸",
     score:0,
-    titles:1,
-    logo:"https://th.bing.com/th/id/OIP.O05sZ_Zw39xCSW1845qSlwHaHa?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3"
+    titles:1
 },
+
 {
-    name:"Toyota",
+    name:"Germany",
+    emoji:"🇩🇪",
     score:0,
-    titles:0,
-    logo:"https://th.bing.com/th/id/R.b4c1d1e8b303191cca43edfcd88a1e7c?rik=qFkt7AOl4rKEmQ&pid=ImgRaw&r=0"
+    titles:0
 },
+
 {
-    name:"Ford",
+    name:"Croatia",
+    emoji:"🇭🇷",
     score:0,
-    titles:0,
-    logo:"https://tse2.mm.bing.net/th/id/OIP.ukrzrCx-twu5Xxc5NFvL2QHaEk?rs=1&pid=ImgDetMain&o=7&rm=3"
+    titles:0
 },
+
 {
-    name:"Porsche",
+    name:"Austria",
+    emoji:"🇦🇹",
     score:0,
-    titles:1,
-    logo:"https://logos-world.net/wp-content/uploads/2021/04/Porsche-Logo.png"
+    titles:1
+},
+
+{
+    name:"Albania",
+    emoji:"🇦🇱",
+    score:0,
+    titles:0
 }
+
 ]
 
 const board = document.getElementById("board")
@@ -204,16 +215,25 @@ function draw(){
         if(!el){
 
             el = document.createElement("div")
+
             el.id = c.name
+
             el.className = "row"
 
             el.innerHTML = `
+
                 <div class="club">
-                    <img class="logo" src="${c.logo}">
+
+                    <div class="logo">
+                        ${c.emoji}
+                    </div>
+
                     ${c.name}
+
                 </div>
 
                 <div class="right">
+
                     <div class="score">
                         ${c.score}
                     </div>
@@ -221,10 +241,13 @@ function draw(){
                     <div class="titles">
                         🏆 ${c.titles}
                     </div>
+
                 </div>
+
             `
 
             board.appendChild(el)
+
         }
 
         el.className = i == 0 ? "row gold" : "row silver"
@@ -234,68 +257,81 @@ function draw(){
         el.querySelector(".score").innerText = c.score
 
         el.querySelector(".titles").innerHTML = `🏆 ${c.titles}`
+
     })
+
 }
 
-/* SOCKET */
 const socket = new WebSocket("ws://localhost:3000")
 
 socket.onmessage = function(event){
 
     let data = JSON.parse(event.data)
 
-    let c = clubs.find(x => x.name === data.club)
+    let c = clubs.find(x => x.name === data.country)
 
     if(c){
+
         c.score += data.points
+
     }
 
     draw()
 
-    let el = document.getElementById(data.club)
+    if(c){
 
-    if(el){
+        let el = document.getElementById(c.name)
 
-        let pop = document.createElement("div")
+        if(el){
 
-        pop.className = "points"
+            let pop = document.createElement("div")
 
-        pop.innerText = "+" + data.points
+            pop.className = "points"
 
-        el.appendChild(pop)
+            pop.innerText = "+" + data.points
 
-        setTimeout(()=>{
-            pop.remove()
-        },1000)
+            el.appendChild(pop)
+
+            setTimeout(()=>{
+
+                pop.remove()
+
+            },1000)
+
+        }
+
     }
+
 }
 
-/* 🏆 ADD TITLE */
-function addTitle(clubName, amount = 1){
+function addTitle(countryName, amount = 1){
 
-    let club = clubs.find(c => c.name === clubName)
+    let club = clubs.find(c => c.name === countryName)
 
     if(!club) return
 
     club.titles += amount
 
     draw()
+
 }
 
-/* ❌ REMOVE TITLE */
-function removeTitle(clubName, amount = 1){
+function removeTitle(countryName, amount = 1){
 
-    let club = clubs.find(c => c.name === clubName)
+    let club = clubs.find(c => c.name === countryName)
 
     if(!club) return
 
     club.titles -= amount
 
     if(club.titles < 0){
+
         club.titles = 0
+
     }
 
     draw()
+
 }
 
 draw()
