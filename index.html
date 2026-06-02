@@ -8,6 +8,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
+<script src="/socket.io/socket.io.js"></script>
+
 <style>
 
 *{
@@ -17,11 +19,10 @@
 }
 
 body{
-
     font-family:'Poppins',sans-serif;
 
     background:
-        radial-gradient(circle at top left,#12284a,#081120 70%);
+        radial-gradient(circle at top left,#13294b,#081120 70%);
 
     min-height:100vh;
 
@@ -60,29 +61,17 @@ body::before{
     }
 }
 
-/* MAIN */
+/* WRAPPER */
 
 .wrapper{
 
     display:flex;
-    align-items:flex-start;
     gap:30px;
-}
-
-/* LEADERBOARD */
-
-.container{
-    width:520px;
 }
 
 /* TITLE */
 
 .title{
-
-    display:flex;
-    align-items:center;
-
-    gap:12px;
 
     color:white;
 
@@ -93,6 +82,12 @@ body::before{
 
     text-shadow:
         0 0 20px rgba(0,255,255,.35);
+}
+
+/* LEADERBOARD */
+
+.container{
+    width:520px;
 }
 
 /* CARD */
@@ -122,11 +117,8 @@ body::before{
 
     border:2px solid rgba(255,255,255,.08);
 
-    backdrop-filter:blur(10px);
-
     box-shadow:
-        0 0 18px rgba(0,170,255,.15),
-        inset 0 0 10px rgba(255,255,255,.03);
+        0 0 18px rgba(0,170,255,.15);
 
     transition:.35s;
 }
@@ -136,9 +128,6 @@ body::before{
     transform:
         translateY(-4px)
         scale(1.02);
-
-    box-shadow:
-        0 0 28px rgba(0,200,255,.4);
 }
 
 /* TOP COUNTRY */
@@ -209,11 +198,6 @@ body::before{
     align-items:center;
     justify-content:center;
 
-    color:white;
-
-    font-size:13px;
-    font-weight:800;
-
     background:
         linear-gradient(
             135deg,
@@ -221,8 +205,10 @@ body::before{
             #5b2dff
         );
 
-    box-shadow:
-        0 0 14px rgba(255,0,200,.4);
+    color:white;
+
+    font-size:13px;
+    font-weight:800;
 }
 
 /* FLAG */
@@ -235,9 +221,6 @@ body::before{
     object-fit:cover;
 
     border-radius:6px;
-
-    box-shadow:
-        0 0 10px rgba(255,255,255,.25);
 }
 
 /* NAME */
@@ -287,12 +270,10 @@ body::before{
 .country-right{
 
     display:flex;
-    align-items:center;
-
     gap:18px;
 }
 
-/* BUTTONS */
+/* SCORE */
 
 .score,
 .gift{
@@ -310,15 +291,11 @@ body::before{
     font-weight:700;
 }
 
-/* SCORE */
-
 .score{
 
     background:
         rgba(255,255,255,.08);
 }
-
-/* GIFT */
 
 .gift{
 
@@ -328,9 +305,6 @@ body::before{
             #ffcc00,
             #ff8800
         );
-
-    box-shadow:
-        0 0 16px rgba(255,170,0,.45);
 }
 
 /* CONTROL PANEL */
@@ -351,9 +325,6 @@ body::before{
         );
 
     border:2px solid rgba(255,255,255,.08);
-
-    box-shadow:
-        0 0 20px rgba(0,170,255,.15);
 }
 
 .controls h2{
@@ -361,58 +332,13 @@ body::before{
     color:white;
 
     margin-bottom:20px;
-
-    font-size:24px;
 }
 
-.control-group{
+/* BUTTONS */
 
-    margin-bottom:16px;
-}
-
-label{
-
-    color:white;
-
-    display:block;
-
-    margin-bottom:8px;
-
-    font-size:14px;
-}
-
-select,
-input{
+.manual-btn{
 
     width:100%;
-
-    height:44px;
-
-    border:none;
-
-    border-radius:12px;
-
-    padding:0 14px;
-
-    background:
-        rgba(255,255,255,.08);
-
-    color:white;
-
-    font-size:15px;
-}
-
-.control-buttons{
-
-    display:flex;
-    gap:12px;
-
-    margin-top:20px;
-}
-
-.add-btn{
-
-    flex:1;
 
     height:46px;
 
@@ -420,8 +346,11 @@ input{
 
     border-radius:14px;
 
+    margin-bottom:12px;
+
     color:white;
 
+    font-size:15px;
     font-weight:700;
 
     cursor:pointer;
@@ -432,26 +361,11 @@ input{
             #00c6ff,
             #0072ff
         );
-
-    box-shadow:
-        0 0 18px rgba(0,150,255,.4);
-
-    transition:.25s;
 }
 
-.add-btn:hover{
+.manual-btn:hover{
 
-    transform:scale(1.05);
-}
-
-.gift-btn{
-
-    background:
-        linear-gradient(
-            135deg,
-            #ffcc00,
-            #ff8800
-        );
+    transform:scale(1.03);
 }
 
 </style>
@@ -460,8 +374,6 @@ input{
 <body>
 
 <div class="wrapper">
-
-<!-- LEADERBOARD -->
 
 <div class="container">
 
@@ -473,88 +385,60 @@ input{
 
 </div>
 
-<!-- CONTROL PANEL -->
+<!-- MANUAL CONTROL -->
 
 <div class="controls">
 
 <h2>
-🎮 Ovládanie
+🎮 Manuálne body
 </h2>
 
-<div class="control-group">
-
-<label>
-Krajina
-</label>
-
-<select id="countrySelect">
-
-<option>Slovensko</option>
-<option>Česko</option>
-<option>Poľsko</option>
-<option>Maďarsko</option>
-<option>Ukrajina</option>
-<option>Nemecko</option>
-<option>Chorvátsko</option>
-<option>Srbsko</option>
-<option>Rakúsko</option>
-<option>Albánsko</option>
-
-</select>
-
-</div>
-
-<div class="control-group">
-
-<label>
-Body
-</label>
-
-<input
-    type="number"
-    id="pointsInput"
-    value="100"
-/>
-
-</div>
-
-<div class="control-group">
-
-<label>
-Gifty
-</label>
-
-<input
-    type="number"
-    id="giftInput"
-    value="1"
-/>
-
-</div>
-
-<div class="control-buttons">
-
 <button
-    class="add-btn"
-    onclick="manualAddPoints()"
+    class="manual-btn"
+    onclick="addPoints('Slovensko',500,1)"
 >
-+ BODY
+🇸🇰 +500 Slovensko
 </button>
 
 <button
-    class="add-btn gift-btn"
-    onclick="manualAddGift()"
+    class="manual-btn"
+    onclick="addPoints('Česko',500,1)"
 >
-🏆 GIFT
+🇨🇿 +500 Česko
 </button>
 
-</div>
+<button
+    class="manual-btn"
+    onclick="addPoints('Poľsko',500,1)"
+>
+🇵🇱 +500 Poľsko
+</button>
+
+<button
+    class="manual-btn"
+    onclick="addPoints('Maďarsko',500,1)"
+>
+🇭🇺 +500 Maďarsko
+</button>
+
+<button
+    class="manual-btn"
+    onclick="addPoints('Nemecko',500,1)"
+>
+🇩🇪 +500 Nemecko
+</button>
 
 </div>
 
 </div>
 
 <script>
+
+/* ========================= */
+/* SOCKET.IO */
+/* ========================= */
+
+const socket = io();
 
 /* ========================= */
 /* COUNTRIES */
@@ -591,43 +475,8 @@ const countries = [
 },
 
 {
-    name:"Ukrajina",
-    code:"ua",
-    score:0,
-    gifts:0
-},
-
-{
     name:"Nemecko",
     code:"de",
-    score:0,
-    gifts:0
-},
-
-{
-    name:"Chorvátsko",
-    code:"hr",
-    score:0,
-    gifts:0
-},
-
-{
-    name:"Srbsko",
-    code:"rs",
-    score:0,
-    gifts:0
-},
-
-{
-    name:"Rakúsko",
-    code:"at",
-    score:0,
-    gifts:0
-},
-
-{
-    name:"Albánsko",
-    code:"al",
     score:0,
     gifts:0
 }
@@ -712,7 +561,7 @@ function renderLeaderboard(){
 /* ADD POINTS */
 /* ========================= */
 
-function addPoints(countryName,points,gifts=0){
+function addPoints(countryName,points,gifts=1){
 
     const country =
         countries.find(
@@ -721,70 +570,31 @@ function addPoints(countryName,points,gifts=0){
 
     if(!country) return;
 
-    country.score += Number(points);
-    country.gifts += Number(gifts);
+    country.score += points;
+    country.gifts += gifts;
 
     renderLeaderboard();
 }
 
 /* ========================= */
-/* MANUAL BUTTONS */
+/* SOCKET EVENTS */
 /* ========================= */
 
-function manualAddPoints(){
+socket.on("gift",(data)=>{
 
-    const country =
-        document.getElementById("countrySelect").value;
+    addPoints(
+        data.country,
+        data.points,
+        data.gifts
+    );
 
-    const points =
-        document.getElementById("pointsInput").value;
-
-    addPoints(country,points,0);
-}
-
-function manualAddGift(){
-
-    const country =
-        document.getElementById("countrySelect").value;
-
-    const gifts =
-        document.getElementById("giftInput").value;
-
-    const points =
-        gifts * 100;
-
-    addPoints(country,points,gifts);
-}
+});
 
 /* ========================= */
 /* FIRST RENDER */
 /* ========================= */
 
 renderLeaderboard();
-
-/* ======================================= */
-/* LIVE.JS */
-/* ======================================= */
-
-/*
-
-SEM NAPOJÍŠ SVOJ live.js
-
-Príklad:
-
-addPoints(
-    "Slovensko",
-    500,
-    1
-);
-
-Keď príde gift:
-- pridá body
-- pridá gift
-- automaticky presortuje krajiny
-- leader sa zmení
-
-*/
 
 </script>
 
