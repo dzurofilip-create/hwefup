@@ -17,34 +17,32 @@
 }
 
 body{
-
     font-family:'Poppins',sans-serif;
 
     background:
-        radial-gradient(circle at top left,#13315c,#081120 70%);
+        radial-gradient(circle at top left,#12284a,#081120 70%);
 
     min-height:100vh;
 
     padding:20px;
 
-    overflow-x:hidden;
+    overflow:hidden;
 }
 
 /* BACKGROUND */
 
 body::before{
-
     content:"";
 
     position:fixed;
     inset:0;
 
     background-image:
-        radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+        radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
 
-    background-size:34px 34px;
+    background-size:32px 32px;
 
-    animation:bgMove 15s linear infinite;
+    animation:bgMove 14s linear infinite;
 
     pointer-events:none;
 }
@@ -56,11 +54,11 @@ body::before{
     }
 
     to{
-        transform:translateY(34px);
+        transform:translateY(32px);
     }
 }
 
-/* CONTAINER */
+/* MAIN */
 
 .container{
     width:520px;
@@ -70,15 +68,24 @@ body::before{
 
 .title{
 
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
     color:white;
 
-    font-size:38px;
+    font-size:42px;
     font-weight:800;
 
     margin-bottom:25px;
 
     text-shadow:
-        0 0 18px rgba(0,255,255,.4);
+        0 0 20px rgba(0,255,255,.35);
+}
+
+.title-icon{
+    font-size:34px;
 }
 
 /* CARD */
@@ -88,33 +95,35 @@ body::before{
     position:relative;
 
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
 
     width:100%;
 
-    padding:16px 22px;
+    padding:16px 20px;
 
     margin-bottom:16px;
 
-    border-radius:22px;
+    border-radius:24px;
 
     background:
         linear-gradient(
             135deg,
-            rgba(36,59,85,.95),
-            rgba(17,25,40,.95)
+            rgba(35,58,90,.96),
+            rgba(12,18,28,.96)
         );
 
     border:2px solid rgba(255,255,255,.08);
 
-    backdrop-filter:blur(12px);
+    backdrop-filter:blur(10px);
 
     box-shadow:
         0 0 18px rgba(0,170,255,.15),
-        inset 0 0 10px rgba(255,255,255,.04);
+        inset 0 0 10px rgba(255,255,255,.03);
 
-    transition:.35s;
+    transition:
+        transform .35s,
+        box-shadow .35s;
 }
 
 .country-card:hover{
@@ -124,32 +133,40 @@ body::before{
         scale(1.02);
 
     box-shadow:
-        0 0 30px rgba(0,200,255,.35);
+        0 0 28px rgba(0,200,255,.4);
 }
 
-/* LEADER */
+/* TOP COUNTRY */
 
 .top-country{
 
     border:2px solid gold;
 
-    animation:pulse 1.5s infinite;
+    box-shadow:
+        0 0 25px rgba(255,215,0,.5);
+
+    animation:pulse 1.6s infinite;
 }
 
 @keyframes pulse{
 
     0%{
-        box-shadow:0 0 10px gold;
+        box-shadow:
+            0 0 10px gold;
     }
 
     50%{
-        box-shadow:0 0 30px gold;
+        box-shadow:
+            0 0 30px gold;
     }
 
     100%{
-        box-shadow:0 0 10px gold;
+        box-shadow:
+            0 0 10px gold;
     }
 }
+
+/* LEADER */
 
 .leader{
 
@@ -170,10 +187,10 @@ body::before{
     border-radius:999px;
 
     box-shadow:
-        0 0 12px gold;
+        0 0 14px gold;
 }
 
-/* LEFT */
+/* LEFT SIDE */
 
 .country-left{
 
@@ -196,20 +213,20 @@ body::before{
     align-items:center;
     justify-content:center;
 
-    background:
-        linear-gradient(
-            135deg,
-            #ff00cc,
-            #3333ff
-        );
-
     color:white;
 
     font-size:13px;
     font-weight:800;
 
+    background:
+        linear-gradient(
+            135deg,
+            #ff00cc,
+            #5b2dff
+        );
+
     box-shadow:
-        0 0 14px rgba(255,0,200,.45);
+        0 0 14px rgba(255,0,200,.4);
 }
 
 /* FLAG */
@@ -224,10 +241,10 @@ body::before{
     border-radius:6px;
 
     box-shadow:
-        0 0 12px rgba(255,255,255,.2);
+        0 0 10px rgba(255,255,255,.25);
 }
 
-/* NAME */
+/* COUNTRY NAME */
 
 .country-name{
 
@@ -261,7 +278,7 @@ body::before{
     }
 
     50%{
-        transform:scale(1.5);
+        transform:scale(1.6);
     }
 
     100%{
@@ -269,19 +286,41 @@ body::before{
     }
 }
 
-/* RIGHT */
+/* RIGHT SIDE */
 
 .country-right{
 
     display:flex;
     align-items:center;
 
-    gap:20px;
+    gap:18px;
 }
 
-/* BUTTONS */
+/* SCORE */
 
-.score,
+.score{
+
+    min-width:90px;
+    height:44px;
+
+    border:none;
+
+    border-radius:14px;
+
+    color:white;
+
+    font-size:15px;
+    font-weight:700;
+
+    background:
+        rgba(255,255,255,.08);
+
+    box-shadow:
+        inset 0 0 8px rgba(255,255,255,.05);
+}
+
+/* GIFT */
+
 .gift{
 
     min-width:90px;
@@ -296,24 +335,6 @@ body::before{
     font-size:15px;
     font-weight:700;
 
-    transition:.25s;
-}
-
-/* SCORE */
-
-.score{
-
-    background:
-        rgba(255,255,255,.08);
-
-    box-shadow:
-        inset 0 0 8px rgba(255,255,255,.05);
-}
-
-/* GIFT */
-
-.gift{
-
     background:
         linear-gradient(
             135deg,
@@ -325,112 +346,135 @@ body::before{
         0 0 16px rgba(255,170,0,.45);
 }
 
+/* SMOOTH MOVE */
+
+.country-card{
+    animation:fadeIn .35s;
+}
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0px);
+    }
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="container" id="leaderboard">
+<div class="container">
 
 <div class="title">
-🌍 LIVE SÚBOJ KRAJÍN
+<div class="title-icon">🌍</div>
+<div>LIVE SÚBOJ KRAJÍN</div>
 </div>
+
+<div id="leaderboard"></div>
 
 </div>
 
 <script>
 
-/* COUNTRIES */
+/* ========================= */
+/* KRAJINY */
+/* ========================= */
 
 const countries = [
 
 {
-    id:"Slovensko",
-    flag:"https://flagcdn.com/w80/sk.png",
+    name:"Slovensko",
+    code:"sk",
     score:0,
     gifts:0
 },
 
 {
-    id:"Česko",
-    flag:"https://flagcdn.com/w80/cz.png",
+    name:"Česko",
+    code:"cz",
     score:0,
     gifts:0
 },
 
 {
-    id:"Poľsko",
-    flag:"https://flagcdn.com/w80/pl.png",
+    name:"Poľsko",
+    code:"pl",
     score:0,
     gifts:0
 },
 
 {
-    id:"Maďarsko",
-    flag:"https://flagcdn.com/w80/hu.png",
+    name:"Maďarsko",
+    code:"hu",
     score:0,
     gifts:0
 },
 
 {
-    id:"Ukrajina",
-    flag:"https://flagcdn.com/w80/ua.png",
+    name:"Ukrajina",
+    code:"ua",
     score:0,
     gifts:0
 },
 
 {
-    id:"Nemecko",
-    flag:"https://flagcdn.com/w80/de.png",
+    name:"Nemecko",
+    code:"de",
     score:0,
     gifts:0
 },
 
 {
-    id:"Chorvátsko",
-    flag:"https://flagcdn.com/w80/hr.png",
+    name:"Chorvátsko",
+    code:"hr",
     score:0,
     gifts:0
 },
 
 {
-    id:"Srbsko",
-    flag:"https://flagcdn.com/w80/rs.png",
+    name:"Srbsko",
+    code:"rs",
     score:0,
     gifts:0
 },
 
 {
-    id:"Rakúsko",
-    flag:"https://flagcdn.com/w80/at.png",
+    name:"Rakúsko",
+    code:"at",
     score:0,
     gifts:0
 },
 
 {
-    id:"Albánsko",
-    flag:"https://flagcdn.com/w80/al.png",
+    name:"Albánsko",
+    code:"al",
     score:0,
     gifts:0
 }
 
 ];
 
+/* ========================= */
 /* RENDER */
+/* ========================= */
 
 function renderLeaderboard(){
 
     const leaderboard =
         document.getElementById("leaderboard");
 
-    leaderboard.innerHTML =
-        `<div class="title">
-            🌍 LIVE SÚBOJ KRAJÍN
-        </div>`;
+    leaderboard.innerHTML = "";
 
     countries
-        .sort((a,b)=>b.score-a.score)
-        .forEach((country,index)=>{
+    .sort((a,b)=>b.score-a.score)
+    .forEach((country,index)=>{
 
         leaderboard.innerHTML += `
 
@@ -457,11 +501,11 @@ function renderLeaderboard(){
 
                 <img
                     class="flag"
-                    src="${country.flag}"
+                    src="https://flagcdn.com/w80/${country.code}.png"
                 >
 
                 <div class="country-name">
-                    ${country.id}
+                    ${country.name}
                 </div>
 
                 ${
@@ -491,13 +535,15 @@ function renderLeaderboard(){
     });
 }
 
-/* UPDATE SCORE */
+/* ========================= */
+/* ADD POINTS */
+/* ========================= */
 
 function addPoints(countryName,points,gifts=1){
 
     const country =
         countries.find(
-            c => c.id === countryName
+            c => c.name === countryName
         );
 
     if(!country) return;
@@ -508,14 +554,16 @@ function addPoints(countryName,points,gifts=1){
     renderLeaderboard();
 }
 
+/* ========================= */
 /* FIRST RENDER */
+/* ========================= */
 
 renderLeaderboard();
 
-/* ===================================== */
+/* ========================= */
 /* TEST AUTO BATTLE */
-/* VYMAŽ KEĎ NAPOJÍŠ live.js */
-/* ===================================== */
+/* ZMAŽ KEĎ NAPOJÍŠ LIVE.JS */
+/* ========================= */
 
 setInterval(()=>{
 
@@ -527,22 +575,22 @@ setInterval(()=>{
         ];
 
     randomCountry.score +=
-        Math.floor(Math.random() * 300);
+        Math.floor(Math.random() * 250);
 
     randomCountry.gifts +=
-        Math.floor(Math.random() * 5);
+        Math.floor(Math.random() * 4);
 
     renderLeaderboard();
 
 },2000);
 
-/* ===================================== */
-/* LIVE.JS EXAMPLE */
-/* ===================================== */
+/* ========================= */
+/* LIVE.JS PRÍKLAD */
+/* ========================= */
 
 /*
 
-Keď dostaneš gift z live.js:
+Keď príde gift:
 
 addPoints(
     "Slovensko",
