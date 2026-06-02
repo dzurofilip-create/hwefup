@@ -25,12 +25,12 @@ body{
 
     min-height:100vh;
 
-    padding:25px;
+    padding:20px;
 
     overflow-x:hidden;
 }
 
-/* POZADIE */
+/* BACKGROUND */
 
 body::before{
 
@@ -44,7 +44,7 @@ body::before{
 
     background-size:34px 34px;
 
-    animation:bgMove 16s linear infinite;
+    animation:bgMove 15s linear infinite;
 
     pointer-events:none;
 }
@@ -66,30 +66,30 @@ body::before{
     width:520px;
 }
 
-/* NADPIS */
+/* TITLE */
 
 .title{
 
     color:white;
 
-    font-size:40px;
+    font-size:38px;
     font-weight:800;
 
-    margin-bottom:28px;
+    margin-bottom:25px;
 
     text-shadow:
-        0 0 18px rgba(0,255,255,.45);
+        0 0 18px rgba(0,255,255,.4);
 }
 
-/* KARTA */
+/* CARD */
 
 .country-card{
 
     position:relative;
 
     display:flex;
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
 
     width:100%;
 
@@ -102,19 +102,19 @@ body::before{
     background:
         linear-gradient(
             135deg,
-            rgba(36,59,85,.96),
-            rgba(17,25,40,.96)
+            rgba(36,59,85,.95),
+            rgba(17,25,40,.95)
         );
 
     border:2px solid rgba(255,255,255,.08);
 
-    backdrop-filter:blur(10px);
+    backdrop-filter:blur(12px);
 
     box-shadow:
-        0 0 18px rgba(0,170,255,.18),
+        0 0 18px rgba(0,170,255,.15),
         inset 0 0 10px rgba(255,255,255,.04);
 
-    transition:.25s;
+    transition:.35s;
 }
 
 .country-card:hover{
@@ -124,10 +124,10 @@ body::before{
         scale(1.02);
 
     box-shadow:
-        0 0 28px rgba(0,200,255,.4);
+        0 0 30px rgba(0,200,255,.35);
 }
 
-/* TOP COUNTRY */
+/* LEADER */
 
 .top-country{
 
@@ -143,7 +143,7 @@ body::before{
     }
 
     50%{
-        box-shadow:0 0 28px gold;
+        box-shadow:0 0 30px gold;
     }
 
     100%{
@@ -168,9 +168,12 @@ body::before{
     padding:5px 12px;
 
     border-radius:999px;
+
+    box-shadow:
+        0 0 12px gold;
 }
 
-/* ĽAVÁ STRANA */
+/* LEFT */
 
 .country-left{
 
@@ -194,7 +197,11 @@ body::before{
     justify-content:center;
 
     background:
-        linear-gradient(135deg,#ff00cc,#3333ff);
+        linear-gradient(
+            135deg,
+            #ff00cc,
+            #3333ff
+        );
 
     color:white;
 
@@ -205,7 +212,7 @@ body::before{
         0 0 14px rgba(255,0,200,.45);
 }
 
-/* VLAJKA */
+/* FLAG */
 
 .flag{
 
@@ -220,7 +227,7 @@ body::before{
         0 0 12px rgba(255,255,255,.2);
 }
 
-/* NÁZOV */
+/* NAME */
 
 .country-name{
 
@@ -230,7 +237,7 @@ body::before{
     font-weight:700;
 }
 
-/* LIVE BODKA */
+/* LIVE DOT */
 
 .live-dot{
 
@@ -262,22 +269,22 @@ body::before{
     }
 }
 
-/* PRAVÁ STRANA */
+/* RIGHT */
 
 .country-right{
 
     display:flex;
     align-items:center;
 
-    gap:22px;
+    gap:20px;
 }
 
-/* BUTTONY */
+/* BUTTONS */
 
 .score,
 .gift{
 
-    min-width:88px;
+    min-width:90px;
     height:44px;
 
     border:none;
@@ -288,8 +295,6 @@ body::before{
 
     font-size:15px;
     font-weight:700;
-
-    cursor:pointer;
 
     transition:.25s;
 }
@@ -320,292 +325,242 @@ body::before{
         0 0 16px rgba(255,170,0,.45);
 }
 
-.gift:hover{
-
-    transform:scale(1.08);
-
-    box-shadow:
-        0 0 28px rgba(255,170,0,.7);
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="container" id="leaderboard">
 
 <div class="title">
 🌍 LIVE SÚBOJ KRAJÍN
 </div>
 
-<!-- SLOVENSKO -->
-
-<div class="country-card top-country">
-
-<div class="leader">
-LEADER
 </div>
 
-<div class="country-left">
+<script>
+
+/* COUNTRIES */
+
+const countries = [
+
+{
+    id:"Slovensko",
+    flag:"https://flagcdn.com/w80/sk.png",
+    score:0,
+    gifts:0
+},
+
+{
+    id:"Česko",
+    flag:"https://flagcdn.com/w80/cz.png",
+    score:0,
+    gifts:0
+},
+
+{
+    id:"Poľsko",
+    flag:"https://flagcdn.com/w80/pl.png",
+    score:0,
+    gifts:0
+},
+
+{
+    id:"Maďarsko",
+    flag:"https://flagcdn.com/w80/hu.png",
+    score:0,
+    gifts:0
+},
+
+{
+    id:"Ukrajina",
+    flag:"https://flagcdn.com/w80/ua.png",
+    score:0,
+    gifts:0
+},
+
+{
+    id:"Nemecko",
+    flag:"https://flagcdn.com/w80/de.png",
+    score:0,
+    gifts:0
+},
+
+{
+    id:"Chorvátsko",
+    flag:"https://flagcdn.com/w80/hr.png",
+    score:0,
+    gifts:0
+},
+
+{
+    id:"Srbsko",
+    flag:"https://flagcdn.com/w80/rs.png",
+    score:0,
+    gifts:0
+},
+
+{
+    id:"Rakúsko",
+    flag:"https://flagcdn.com/w80/at.png",
+    score:0,
+    gifts:0
+},
+
+{
+    id:"Albánsko",
+    flag:"https://flagcdn.com/w80/al.png",
+    score:0,
+    gifts:0
+}
+
+];
+
+/* RENDER */
+
+function renderLeaderboard(){
+
+    const leaderboard =
+        document.getElementById("leaderboard");
+
+    leaderboard.innerHTML =
+        `<div class="title">
+            🌍 LIVE SÚBOJ KRAJÍN
+        </div>`;
+
+    countries
+        .sort((a,b)=>b.score-a.score)
+        .forEach((country,index)=>{
+
+        leaderboard.innerHTML += `
+
+        <div class="
+            country-card
+            ${index === 0 ? "top-country" : ""}
+        ">
+
+            ${
+                index === 0
+                ?
+                `<div class="leader">
+                    LEADER
+                </div>`
+                :
+                ""
+            }
 
-<div class="rank">#1</div>
+            <div class="country-left">
 
-<img class="flag" src="https://flagcdn.com/w80/sk.png">
+                <div class="rank">
+                    #${index + 1}
+                </div>
 
-<div class="country-name">
-Slovensko
-</div>
+                <img
+                    class="flag"
+                    src="${country.flag}"
+                >
 
-<div class="live-dot"></div>
+                <div class="country-name">
+                    ${country.id}
+                </div>
 
-</div>
+                ${
+                    index === 0
+                    ?
+                    `<div class="live-dot"></div>`
+                    :
+                    ""
+                }
 
-<div class="country-right">
+            </div>
 
-<button class="score">0</button>
+            <div class="country-right">
 
-<button class="gift">🏆 0</button>
+                <button class="score">
+                    ${country.score}
+                </button>
 
-</div>
+                <button class="gift">
+                    🏆 ${country.gifts}
+                </button>
 
-</div>
+            </div>
 
-<!-- ČESKO -->
+        </div>
+        `;
+    });
+}
 
-<div class="country-card">
+/* UPDATE SCORE */
 
-<div class="country-left">
+function addPoints(countryName,points,gifts=1){
 
-<div class="rank">#2</div>
+    const country =
+        countries.find(
+            c => c.id === countryName
+        );
 
-<img class="flag" src="https://flagcdn.com/w80/cz.png">
+    if(!country) return;
 
-<div class="country-name">
-Česko
-</div>
+    country.score += points;
+    country.gifts += gifts;
 
-</div>
+    renderLeaderboard();
+}
 
-<div class="country-right">
+/* FIRST RENDER */
 
-<button class="score">0</button>
+renderLeaderboard();
 
-<button class="gift">🏆 0</button>
+/* ===================================== */
+/* TEST AUTO BATTLE */
+/* VYMAŽ KEĎ NAPOJÍŠ live.js */
+/* ===================================== */
 
-</div>
+setInterval(()=>{
 
-</div>
+    const randomCountry =
+        countries[
+            Math.floor(
+                Math.random() * countries.length
+            )
+        ];
 
-<!-- POĽSKO -->
+    randomCountry.score +=
+        Math.floor(Math.random() * 300);
 
-<div class="country-card">
+    randomCountry.gifts +=
+        Math.floor(Math.random() * 5);
 
-<div class="country-left">
+    renderLeaderboard();
 
-<div class="rank">#3</div>
+},2000);
 
-<img class="flag" src="https://flagcdn.com/w80/pl.png">
+/* ===================================== */
+/* LIVE.JS EXAMPLE */
+/* ===================================== */
 
-<div class="country-name">
-Poľsko
-</div>
+/*
 
-</div>
+Keď dostaneš gift z live.js:
 
-<div class="country-right">
+addPoints(
+    "Slovensko",
+    500,
+    1
+);
 
-<button class="score">0</button>
+alebo:
 
-<button class="gift">🏆 0</button>
+addPoints(
+    "Česko",
+    1200,
+    3
+);
 
-</div>
+*/
 
-</div>
-
-<!-- MAĎARSKO -->
-
-<div class="country-card">
-
-<div class="country-left">
-
-<div class="rank">#4</div>
-
-<img class="flag" src="https://flagcdn.com/w80/hu.png">
-
-<div class="country-name">
-Maďarsko
-</div>
-
-</div>
-
-<div class="country-right">
-
-<button class="score">0</button>
-
-<button class="gift">🏆 0</button>
-
-</div>
-
-</div>
-
-<!-- UKRAJINA -->
-
-<div class="country-card">
-
-<div class="country-left">
-
-<div class="rank">#5</div>
-
-<img class="flag" src="https://flagcdn.com/w80/ua.png">
-
-<div class="country-name">
-Ukrajina
-</div>
-
-</div>
-
-<div class="country-right">
-
-<button class="score">0</button>
-
-<button class="gift">🏆 0</button>
-
-</div>
-
-</div>
-
-<!-- NEMECKO -->
-
-<div class="country-card">
-
-<div class="country-left">
-
-<div class="rank">#6</div>
-
-<img class="flag" src="https://flagcdn.com/w80/de.png">
-
-<div class="country-name">
-Nemecko
-</div>
-
-</div>
-
-<div class="country-right">
-
-<button class="score">0</button>
-
-<button class="gift">🏆 0</button>
-
-</div>
-
-</div>
-
-<!-- CHORVÁTSKO -->
-
-<div class="country-card">
-
-<div class="country-left">
-
-<div class="rank">#7</div>
-
-<img class="flag" src="https://flagcdn.com/w80/hr.png">
-
-<div class="country-name">
-Chorvátsko
-</div>
-
-</div>
-
-<div class="country-right">
-
-<button class="score">0</button>
-
-<button class="gift">🏆 0</button>
-
-</div>
-
-</div>
-
-<!-- SRBSKO -->
-
-<div class="country-card">
-
-<div class="country-left">
-
-<div class="rank">#8</div>
-
-<img class="flag" src="https://flagcdn.com/w80/rs.png">
-
-<div class="country-name">
-Srbsko
-</div>
-
-</div>
-
-<div class="country-right">
-
-<button class="score">0</button>
-
-<button class="gift">🏆 0</button>
-
-</div>
-
-</div>
-
-<!-- RAKÚSKO -->
-
-<div class="country-card">
-
-<div class="country-left">
-
-<div class="rank">#9</div>
-
-<img class="flag" src="https://flagcdn.com/w80/at.png">
-
-<div class="country-name">
-Rakúsko
-</div>
-
-</div>
-
-<div class="country-right">
-
-<button class="score">0</button>
-
-<button class="gift">🏆 0</button>
-
-</div>
-
-</div>
-
-<!-- ALBÁNSKO -->
-
-<div class="country-card">
-
-<div class="country-left">
-
-<div class="rank">#10</div>
-
-<img class="flag" src="https://flagcdn.com/w80/al.png">
-
-<div class="country-name">
-Albánsko
-</div>
-
-</div>
-
-<div class="country-right">
-
-<button class="score">0</button>
-
-<button class="gift">🏆 0</button>
-
-</div>
-
-</div>
-
-</div>
+</script>
 
 </body>
 </html>
